@@ -1,0 +1,62 @@
+.headerWrapper {
+    background: #fff;
+    border: 1px solid #E1E1E1;
+    margin-bottom: 56px;
+
+    .header {
+        font-family: "Inter", sans-serif;
+        max-width: rem(1280px);
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: rem(20px);
+        transition: .5s all;
+        padding: 15px 0;
+
+        .right {
+            display: flex;
+
+            .verticalLine {
+                margin: 0 12px;
+                width: 2px;
+                background: #DDDDDD;
+            }
+
+            .callBtn {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .callIcon {
+                    width: 36px;
+                    height: 36px;
+                    // padding: 9.6px;
+                    background: #F6F6F6;
+                    border-radius: 79px;
+                    @include element-center;
+                }
+
+                .callInfo {
+                    text-align: start;
+
+                    .number {
+                        white-space: nowrap;
+                        font-weight: 600;
+                        font-size: 16px;
+                        line-height: 19.36px;
+                    }
+
+                    .subscriberDepartmenText {
+                        white-space: nowrap;
+                        font-weight: 500;
+                        font-size: 12px;
+                        line-height: 14.52px;
+                        color: var(--primary-color);
+                    }
+                }
+            }
+        }
+    }
+}

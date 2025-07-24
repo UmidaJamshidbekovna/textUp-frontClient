@@ -1,0 +1,46 @@
+.stageThree {
+    flex: 1;
+    background: #FAFAFA;
+    padding: 56px 0;
+
+    .container {
+        max-width: 1248px;
+        width: 100%;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 32px;
+        padding: 20px;
+
+        .title {
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 24px;
+            color: #303940;
+            margin-bottom: 8px;
+        }
+
+        .inpGr {
+            margin-bottom: 8px;
+            max-width: 350px;
+        }
+
+        .resendCode {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 32px;
+            color: #6E8BB7;
+
+            margin-bottom: 22px;
+        }
+
+        .activationCodeSent {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16.94px;
+            padding: 16px;
+            background: #8280FF1A;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+    }
+}

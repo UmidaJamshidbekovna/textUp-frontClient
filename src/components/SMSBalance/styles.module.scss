@@ -1,0 +1,77 @@
+.SMSBalance {
+    flex: 1;
+    padding: 24px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    // overflow: hidden;
+
+    .balance {
+        width: 100%;
+        padding: 18.5px 24px;
+        background: #fff;
+        border: 1px solid #EAECF0;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .company {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19.36px;
+        }
+
+        .summ {
+            font-weight: 600;
+            font-size: 28px;
+            line-height: 33.89px;
+        }
+
+        .status {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            color: #067647;
+
+            border-radius: 24px;
+            padding: 4px 12px;
+            background: #ECFDF3;
+            border: 1px solid #ABEFC6;
+        }
+    }
+
+    .table {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        // overflow: hidden;
+
+        border-radius: 12px;
+        padding: 15px 24px;
+        background: #fff;
+        border: 1px solid #EAECF0;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+
+        .paymentHistoryTitle {
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 28px;
+        }
+
+        .datePickerWrapper {
+            border: 1px solid #D0D5DD;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+        }
+
+        .chakraTable {
+            flex: 1;
+        }
+    }
+}

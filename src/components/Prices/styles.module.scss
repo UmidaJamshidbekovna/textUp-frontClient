@@ -1,0 +1,51 @@
+.prices {
+    flex: 1;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    // overflow: hidden;
+
+    .setcion {
+        // overflow: hidden;
+        width: 100%;
+        height: 100%;
+        padding: 18.5px 24px;
+        background: #fff;
+        border: 1px solid #EAECF0;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+
+            .pricesTitle {
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 28px;
+            }
+
+            .btns {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+
+        .infoSection {
+            background: #8280FF1A;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .chakraTable {
+            flex: 1;
+        }
+    }
+}

@@ -1,0 +1,226 @@
+.contacts {
+    flex: 1;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    // overflow: hidden;
+
+    .setcion {
+        // overflow: scroll;
+        width: 100%;
+        min-height: 100%;
+        padding: 18.5px 24px;
+        background: #fff;
+        border: 1px solid #EAECF0;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+
+            .headBtns {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .addContact {
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+            }
+        }
+
+        .uploadNewContactsInfo {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            color: red;
+            margin-bottom: 24px;
+        }
+
+        .searchSection {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .table {
+            flex: 1;
+            border: 1px solid #EAECF0;
+            border-radius: 12px;
+
+            display: flex;
+            flex-direction: column;
+
+            .tabListWrapper {
+                padding: 20px 24px;
+                display: flex;
+                justify-content: space-between;
+
+                .tabList {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+
+                    .contactTab {
+                        padding-bottom: 11px;
+                        border-bottom: 2px solid transparent;
+                        cursor: pointer;
+                        user-select: none;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #344054;
+
+                        &.activeTab {
+                            border-bottom: 2px solid var(--primary-bg);
+                            color: var(--primary-bg);
+
+                            .count {
+                                background: #F9F5FF;
+                                border-color: #E9D7FE;
+                            }
+                        }
+
+                        .count {
+                            min-width: 22px;
+                            height: 22px;
+                            background: #F9FAFB;
+                            border: 1px solid #EAECF0;
+                            border-radius: 50%;
+                            @include element-center;
+                        }
+                    }
+                }
+
+                .deleteSelected {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: #FF3B30;
+                    color: #fff;
+                    height: 32px;
+                    white-space: nowrap;
+                    padding: 4px;
+                    border-radius: 4px;
+
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+            }
+
+            .chakraTable {
+                flex: 1;
+                border: none;
+
+                .full_name {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    user-select: none;
+
+                    &>input {
+                        display: none;
+                    }
+                }
+
+                .status {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    padding: 2px 8px;
+                    border-radius: 16px;
+
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 18px;
+                }
+
+                .success {
+                    border: 1px solid #ABEFC6;
+                    color: #067647;
+                    background: #ECFDF3;
+                }
+
+                .processing {
+                    border: 1px solid #EAECF0;
+                    color: #344054;
+                    background: #F9FAFB;
+                }
+
+                .declined {
+                    border: 1px solid #FECDCA;
+                    color: #B42318;
+                    background: #FEF3F2;
+                }
+            }
+        }
+    }
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .agreements {
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        user-select: none;
+
+        .characterUsageGuide {
+            color: var(--underline-color);
+            text-decoration: underline;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+}
+
+.btns {
+    display: flex;
+    gap: 6px;
+
+    .mdBlock {
+        padding: 4px;
+        background: #000;
+        color: #fff;
+    }
+
+    .tbEdit {
+        padding: 4px;
+        background: #FFCC00;
+    }
+
+    .faRegTrashAlt {
+        padding: 4px;
+        background: #FF3B30;
+        color: #fff;
+    }
+
+    .ciUnlock {
+        padding: 4px;
+        background: #008cff;
+        color: #fff
+    }
+}

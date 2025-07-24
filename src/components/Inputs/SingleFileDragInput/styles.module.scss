@@ -1,0 +1,125 @@
+.singleFileDragInput {
+    border: rem(1px) dashed #A5A5A580;
+    border-radius: 8px;
+
+    .dropArea {
+        padding: 20px;
+        text-align: center;
+
+        @include breakpoint("md") {
+            justify-content: center;
+        }
+
+        &.active {
+            border-color: #00f;
+            background-color: #f0f8ff;
+        }
+    }
+
+    .fileUploadLabel {
+        @include flex-column;
+        gap: rem(4px);
+
+        &>div {
+            display: flex;
+            gap: rem(17px);
+            padding: rem(16px);
+            border-radius: rem(8px);
+
+            &>:first-child {
+                display: flex;
+                align-items: center;
+                gap: rem(9px);
+                color: #929292;
+
+                font-size: rem(16px);
+                font-weight: 500;
+                line-height: rem(19.2px);
+            }
+        }
+    }
+
+    .fileUploadInp {
+        display: none;
+    }
+
+    .uploadsList {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+
+        .uploadItem {
+            display: flex;
+            flex-direction: column;
+
+            .section {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+
+                .fileInfo {
+                    display: flex;
+                    align-items: center;
+                    overflow: hidden;
+
+                    .fileName {
+                        font-size: 16px;
+                        font-weight: 500;
+                        line-height: 19.2px;
+                        color: #A5A5A5;
+
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                }
+
+                .fileSize {
+                    white-space: nowrap;
+                }
+
+                .actions {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                }
+            }
+        }
+    }
+}
+
+.progressBar {
+    width: 80px;
+    height: 4px;
+    background-color: #F5F4F2;
+    border-radius: 2px;
+    overflow: hidden;
+
+    >div {
+        height: 100%;
+        background-color: var(--colors-blue);
+        transition: width 0.3s ease;
+    }
+}
+
+.removeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #F5F4F2;
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+        color: #A5A5A5;
+    }
+}

@@ -1,0 +1,94 @@
+.instruction {
+    background: #8280FF1A;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 16px;
+
+    .accordionButton {
+        padding: 16px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 100%;
+        color: var(--primary-color);
+        transition: .5s all;
+    }
+
+    .accordionBody {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: .5s all;
+
+        &Open {
+            max-height: 200vh;
+            opacity: 1;
+        }
+
+        .moderationGuidelines {
+            &Title {
+                font-weight: 700;
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            &Desc {
+                font-weight: 400;
+                font-size: 14px;
+
+                &:nth-child(2) {
+                    margin-bottom: 20px;
+                }
+            }
+        }
+
+        .points {
+            display: flex;
+            gap: 24px;
+
+            .point {
+                &:nth-child(2) {
+                    border-left: 1px solid #C5C5C5;
+                    padding: 0 0 0 24px;
+                }
+
+                &Title {
+                    font-weight: 700;
+                    font-size: 18px;
+                    margin-bottom: 16px;
+                }
+
+                &Desc {
+                    font-weight: 600;
+                    font-size: 14px;
+                    margin-bottom: 16px;
+                }
+
+                .examples {
+                    padding: 0 0 0 20px;
+                }
+            }
+        }
+
+        .statuses {
+            .statusesTitle {
+                font-weight: 700;
+                font-size: 18px;
+            }
+
+            .statusesList {
+                padding: 16px;
+                font-weight: 400;
+                font-size: 14px;
+            }
+        }
+    }
+}

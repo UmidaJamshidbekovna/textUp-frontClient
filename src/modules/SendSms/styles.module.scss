@@ -1,0 +1,31 @@
+.sms {
+    flex: 1;
+    overflow: scroll;
+    padding: 32px 32px 0;
+    background: #F8F8F8;
+    display: flex;
+    flex-direction: column;
+
+    .tabList {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-top: 24px;
+        border-bottom: 1px solid #EAECF0;
+
+        .tab {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            padding-bottom: 11px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            user-select: none;
+
+            &.activeTab {
+                border-bottom: 2px solid var(--primary-bg);
+                color: var(--primary-bg);
+            }
+        }
+    }
+}

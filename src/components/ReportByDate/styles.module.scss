@@ -1,0 +1,187 @@
+.contacts {
+    flex: 1;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .setcion {
+        width: 100%;
+        min-height: 100%;
+        padding: 18.5px 24px;
+        background: #fff;
+        border: 1px solid #EAECF0;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+
+        .head {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+
+            .title {
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 28px;
+            }
+
+            .link {
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 20px;
+
+                color: var(--primary-color);
+            }
+        }
+
+        .filters {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+
+            .label {
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 20px;
+
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                .inp {
+                    border: 1px solid #D0D5DD;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    height: 40px;
+                    padding: 0 10px;
+
+                    &[type="time"]::-webkit-calendar-picker-indicator {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .reset {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .statusesCounts {
+            width: 100%;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .info {
+            width: 100%;
+            border-radius: 12px;
+            padding: 24px 50px;
+            background: #8280FF1A;
+            text-align: center;
+            margin-bottom: 16px;
+
+            .smsCost {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 100%;
+                margin-bottom: 5px;
+            }
+
+            .smsPaymentInfo {
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 100%;
+            }
+        }
+
+        .table {
+            width: 100%;
+            flex: 1;
+            border: 1px solid #EAECF0;
+            border-radius: 12px;
+
+            display: flex;
+            flex-direction: column;
+
+            .chakraTable {
+                flex: 1;
+                border: none;
+
+                .phone {
+                    display: flex;
+                    flex-direction: column;
+                    white-space: nowrap;
+
+                    .viewCharacters {
+                        color: var(--colors-blue);
+                        font-weight: 500;
+                        font-size: 14px;
+                        line-height: 20px;
+                    }
+                }
+
+                .messageText {
+                    max-width: 248px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 15px;
+                }
+
+                .statusWrapper {
+                    max-width: 111px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+
+                    .statusDate {
+                        margin-bottom: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.statusDiv {
+    padding: 2px 8px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    border: 1px solid;
+    border-radius: 16px;
+}
+
+.delivered {
+    background: #ECFDF3;
+    border-color: #ABEFC6;
+    color: #067647;
+}
+
+.transferred {
+    background: #FFFAEB;
+    border-color: #FEDF89;
+    color: #B54708;
+}
+
+.notDelivered {
+    background: #FEF3F2;
+    border-color: #FECDCA;
+    color: #B42318;
+}

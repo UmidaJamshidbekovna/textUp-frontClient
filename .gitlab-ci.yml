@@ -1,0 +1,55 @@
+before_script:
+  - docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD
+
+variables:
+  PROD_NAMESPACE: prod-microservices
+  DEV_NAMESPACE: dev-microservices
+
+stages:
+  - build
+  - deploy
+
+#--------------DEV--------------#
+
+build_image_dev:
+  image: registry.textup.uz/devops1/helm-chart:dind
+  stage: build
+  script:
+    - make build-image NODE_ENV=dev TAG=$CI_PIPELINE_IID PROJECT_NAME=$CI_PROJECT_NAMESPACE REGISTRY=$CI_REGISTRY ENV_TAG=test
+    - make push-image TAG=$CI_PIPELINE_IID PROJECT_NAME=$CI_PROJECT_NAMESPACE REGISTRY=$CI_REGISTRY ENV_TAG=test
+  only:
+    - dev
+
+deploy_to_dev:
+  image: registry.textup.uz/devops1/helm-chart:dind
+  stage: deploy
+  script:
+    - cp $DEV_KUBECONFIG ~/.kube/config
+    - DEPLOYMENT=$(echo $CI_PROJECT_NAME | sed s/_/-/g | sed s/$CI_PROJECT_NAMESPACE-//g)
+    - helm repo add --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD $HELM_REPO_NAME $HELM_REGISTRY_PATH
+    - helm upgrade --install $DEPLOYMENT $HELM_REPO_NAME/$HELM_REPO_NAME --set=image.tag=$CI_PIPELINE_IID --values .helm/values-dev.yaml -n $DEV_NAMESPACE
+  only:
+    - dev
+
+#--------------PRODUCTION--------------#
+
+build_image_prod:
+  image: registry.textup.uz/devops1/helm-chart:dind
+  stage: build
+  script:
+    - make build-image NODE_ENV=production TAG=$CI_PIPELINE_IID PROJECT_NAME=$CI_PROJECT_NAMESPACE REGISTRY=$CI_REGISTRY ENV_TAG=latest
+    - make push-image TAG=$CI_PIPELINE_IID PROJECT_NAME=$CI_PROJECT_NAMESPACE REGISTRY=$CI_REGISTRY ENV_TAG=latest
+  only:
+    - main
+
+deploy_to_prod:
+  image: registry.textup.uz/devops1/helm-chart:dind
+  stage: deploy
+  script:
+    - cp $PROD_KUBECONFIG ~/.kube/config
+    - DEPLOYMENT=$(echo $CI_PROJECT_NAME | sed s/_/-/g | sed s/$CI_PROJECT_NAMESPACE-//g)
+    - helm repo add --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD $HELM_REPO_NAME $HELM_REGISTRY_PATH
+    - helm upgrade --install $DEPLOYMENT $HELM_REPO_NAME/$HELM_REPO_NAME --set=image.tag=$CI_PIPELINE_IID --values .helm/values-prod.yaml -n $PROD_NAMESPACE
+  only:
+    - main
+

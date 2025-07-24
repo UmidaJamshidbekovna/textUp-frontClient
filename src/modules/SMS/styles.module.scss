@@ -1,0 +1,59 @@
+.sms {
+    flex: 1;
+    overflow: scroll;
+    padding: 32px;
+    background: #F8F8F8;
+    display: flex;
+    flex-direction: column;
+
+    .langSelect {
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border: 1px solid #D0D5DD;
+        border-radius: 28px;
+
+        &>*:first-child {
+            border-radius: 28px;
+            background: #fff;
+        }
+    }
+
+    .balance {
+        height: 42px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border: 1px solid #D0D5DD;
+        border-radius: 28px;
+        background: #fff;
+
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 14.52px;
+    }
+
+    .tabList {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-top: 24px;
+        border-bottom: 1px solid #EAECF0;
+
+        .tab {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            padding-bottom: 11px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            user-select: none;
+
+            &.activeTab {
+                border-bottom: 2px solid var(--primary-bg);
+                color: var(--primary-bg);
+            }
+        }
+    }
+}

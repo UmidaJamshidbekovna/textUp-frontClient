@@ -1,0 +1,114 @@
+.texts {
+    flex: 1;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    // overflow: scroll;
+
+    .setcion {
+        width: 100%;
+        min-height: 100%;
+        padding: 18.5px 24px;
+        background: #fff;
+        border: 1px solid #EAECF0;
+        box-shadow: 0px 1px 2px 0px #1018280D;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+
+            .textsTitle {
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 28px;
+            }
+
+            .btns {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .viewGuide {
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+
+                .addBtn {
+                    gap: 5px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+        }
+
+        .chakraTable {
+            flex: 1;
+        }
+    }
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .textarea {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .originalTextRequirement {
+            color: red;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .characterCountingBtn {
+            color: var(--underline-color);
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        &>textarea {
+            width: 100%;
+            min-height: 130px;
+            border: 1px solid #D0D5DD;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+    }
+
+    .characterUsageGuide {
+        color: var(--underline-color);
+        text-decoration: underline;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .agreements {
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        user-select: none;
+
+        &>label {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+}

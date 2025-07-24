@@ -1,0 +1,139 @@
+.stageOne {
+    flex: 1;
+    background: #FAFAFA;
+    padding: 56px 0;
+
+    .container {
+        max-width: 1248px;
+        width: 100%;
+        min-height: 300px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 32px;
+        padding: 32px 32px 0;
+        display: flex;
+        justify-content: start;
+        gap: 12px;
+
+        .stepper {
+            @include flex-column;
+            align-items: center;
+
+            .iconWrapper {
+                width: 40px;
+                height: 40px;
+                @include element-center;
+                border-radius: 50%;
+                border: 3px solid;
+
+                .iconBody {
+                    background: #E5E9EB;
+                    width: 80%;
+                    height: 80%;
+                    border-radius: 50%;
+                    @include element-center;
+                }
+
+                .faCheck {
+                    color: #fff;
+                    font-size: 18px;
+                }
+            }
+
+            .lineBody {
+                @include flex-column;
+                align-items: center;
+                background: var(--primary-color);
+                height: 205px;
+                width: 2px;
+                margin: 0 auto;
+
+                .line {
+                    transition: .3s all;
+                    width: 2px;
+                    background: #22c348;
+                }
+            }
+        }
+
+        .steps {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .stepOne {
+                width: 100%;
+                padding-top: 8px;
+
+                .title {
+                    font-weight: 600;
+                    font-size: 18px;
+                    line-height: 24px;
+                    height: 40px;
+                }
+
+                .inputs {
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 24px;
+                    // min-height: 118px;
+                    margin-bottom: 50px;
+                }
+            }
+
+            .stepTwo {
+                display: flex;
+                flex-direction: column;
+
+                // animation
+                // max-height: 0;
+                overflow: hidden;
+                transition: .5s all;
+                // opacity: 0;
+
+                .title {
+                    font-weight: 600;
+                    font-size: 18px;
+                    line-height: 24px;
+                    height: 40px;
+                }
+
+                .inputs {
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 24px;
+                    margin-bottom: 38px;
+                }
+
+                .footer {
+                    width: 100%;
+                    padding: 16px 20px 20px;
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 8px;
+
+                    .btn {
+                        width: 160px !important;
+                        font-weight: 500 !important;
+                        font-size: 14px !important;
+                        line-height: 24px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.passwordInp {
+    display: flex;
+    flex-direction: column;
+
+    .text {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        color: #344054;
+    }
+}
