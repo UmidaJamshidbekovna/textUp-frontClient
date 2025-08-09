@@ -36,7 +36,7 @@ export default SmsPage
 
 export async function getServerSideProps(context) {
     const cookies = parseCookies(context);
-    const accessToken = cookies.accessToken;
+    const accessToken = cookies?.accessToken;
     const id = cookies.id;
     const page = context.query.page ?? 1;
     const limit = context.query.limit ?? 10;
@@ -64,12 +64,20 @@ export async function getServerSideProps(context) {
         ...user,
     };
 
-    const reportByDate = await smsService.smsGetList({ page: 1, limit: 10 })
+    let reportByDate = { count: 0, smsList: [], deliveredCount: 0, notDeliveredCount: 0, sendCount: 0 };
+    try {
+        const res = await smsService.smsGetList({ userId: id, page: 1, limit: 10 });
+        if (res && typeof res === 'object') {
+            reportByDate = res;
+        }
+    } catch (e) {
+        reportByDate = { count: 0, smsList: [], deliveredCount: 0, notDeliveredCount: 0, sendCount: 0 };
+    }
 
     return {
         props: {
-            tab: context.query.tab ?? "",
-            contactsTab: context.query.contactsTab ?? "",
+            tab: context?.query?.tab ?? "",
+            contactsTab: context?.query?.contactsTab ?? "",
             group: maybeGroup ?? {},
             user: userData,
             groups: groups ?? {},
