@@ -63,15 +63,16 @@ const SendSMSTab = ({
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const phoneOrRec = tabState == "byGroups" ? ({ recipients: state?.recipients }) : ({ recipients: [`${state?.phone}`] })
         const data = {
             message: state?.message,
-            recipients: state?.recipients,
             userId: state?.userId,
             templateId: state?.templateId,
             groupId: state?.groupId?.id,
             name: state?.name,
             plannedTime: state.shipment == "scheduledShipment" ? state?.date + " " + state?.time : "",
             userId,
+            ...phoneOrRec,
         }
         sendSmsMutate(data)
     }
