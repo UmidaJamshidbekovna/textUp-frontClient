@@ -9,7 +9,7 @@ const nextConfig = nextTranslate({
 		appDir: true,
 	},
 	images: {
-		domains: [process.env.NEXT_PUBLIC_AUTH_URLNEXT_PUBLIC_AUTH_URL, "https://textup-client.netlify.app", ""],
+		domains: [process.env.NEXT_PUBLIC_AUTH_URL, "https://textup-client.netlify.app", ""],
 	},
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'styles')],
