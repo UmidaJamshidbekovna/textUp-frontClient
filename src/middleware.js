@@ -6,7 +6,7 @@ export async function middleware(request) {
     const currentPath = request.nextUrl.pathname
 
     if (id) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}users/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}users/${id}`, {
             credentials: 'include',
         });
 

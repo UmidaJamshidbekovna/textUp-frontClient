@@ -2,7 +2,7 @@ import axios from "axios";
 import cookies from "nookies"
 
 const httpRequest = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_AUTH_URL,
   timeout: 100000,
 });
 
