@@ -66,16 +66,6 @@ export async function getServerSideProps(context) {
         ...user,
     };
 
-<<<<<<< HEAD
-    let reportByDate = { count: 0, smsList: [], deliveredCount: 0, notDeliveredCount: 0, sendCount: 0 };
-    try {
-        const res = await smsService.smsGetList({ userId: id, page: 1, limit: 10 });
-        if (res && typeof res === 'object') {
-            reportByDate = res;
-        }
-    } catch (e) {
-        reportByDate = { count: 0, smsList: [], deliveredCount: 0, notDeliveredCount: 0, sendCount: 0 };
-=======
     // Fetch SMS report data using SSR-compatible httpRequest
     let reportByDate = { count: 0, smsList: [] };
     try {
@@ -88,8 +78,7 @@ export async function getServerSideProps(context) {
         reportByDate = reportResponse || { count: 0, smsList: [] };
     } catch (error) {
         console.error('Error fetching SMS report:', error);
-        // Keep default empty data on error
->>>>>>> master
+
     }
 
     return {
