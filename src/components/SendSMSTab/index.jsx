@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation'
 import styles from './styles.module.scss'
-import { Button, Flex, Text } from '@chakra-ui/react'
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { Button, Flex, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from '@chakra-ui/react'
+import { FaExternalLinkAlt, FaCheckCircle } from "react-icons/fa";
 import { useState } from 'react'
 import Link from 'next/link'
 import CustomSelect from '../Inputs/CustomSelect';
@@ -34,6 +34,7 @@ const SendSMSTab = ({
     const { errorToast, successToast } = useCustomToast()
     const [tabState, setTabState] = useState("byGroups")
     const [state, setState] = useState(initialData)
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
     const { t } = useTranslation()
 
     const { data: groupsData } = useGroupsGetList({
@@ -59,7 +60,15 @@ const SendSMSTab = ({
         },
     })
 
-    const { mutate: sendSmsMutate, isLoading: sendLoading } = useSmsCreateMutation()
+    const { mutate: sendSmsMutate, isLoading: sendLoading } = useSmsCreateMutation({
+        onSuccess: (data) => {
+            setIsSuccessModalOpen(true)
+            setState(initialData) // Reset form after successful send
+        },
+        onError: (error) => {
+            errorToast(error?.data?.error_message || "Failed to send message")
+        }
+    })
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -307,12 +316,43 @@ const SendSMSTab = ({
 
                         </div>
 
-                        <Button type='submit' className={styles.sendBtn}>{t("send")}</Button>
+                        <Button type='submit' className={styles.sendBtn} isLoading={sendLoading} loadingText={t("sending")}>
+                            {t("send")}
+                        </Button>
 
                     </form>
                 }
 
             </div>
+
+            {/* Success Modal */}
+            <Modal isOpen={isSuccessModalOpen} onClose={() => setIsSuccessModalOpen(false)} isCentered>
+                <ModalOverlay />
+                <ModalContent maxW="400px" mx={4}>
+                    <ModalHeader textAlign="center" pb={2}>
+                        <Flex direction="column" align="center" gap={3}>
+                            <FaCheckCircle size={48} color="#48BB78" />
+                            <Text fontSize="xl" fontWeight="bold" color="green.500">
+                                {t("success")}
+                            </Text>
+                        </Flex>
+                    </ModalHeader>
+                    <ModalBody textAlign="center" py={4}>
+                        <Text fontSize="md" color="gray.600">
+                            {t("yourMessageHasBeenSentSuccessfully")}
+                        </Text>
+                    </ModalBody>
+                    <ModalFooter justifyContent="center" pt={2}>
+                        <Button
+                            colorScheme="green"
+                            onClick={() => setIsSuccessModalOpen(false)}
+                            px={8}
+                        >
+                            {t("ok")}
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
 
         </div>
     )

@@ -1,7 +1,7 @@
 import MainLayout from "@/Layouts/MainLayout"
 import SendSms from "@/modules/SendSms"
 import { fetchMultipleUrls } from "@/services/fetchMultipleUrls"
-import smsService from "@/services/sms.service"
+import httpRequest from "@/services/httpRequest"
 import { parseCookies } from "nookies"
 
 
@@ -15,6 +15,8 @@ const SmsPage = ({
     templates,
     reportByDate,
 }) => {
+
+
 
     return (
         <MainLayout user={user}>
@@ -64,6 +66,7 @@ export async function getServerSideProps(context) {
         ...user,
     };
 
+<<<<<<< HEAD
     let reportByDate = { count: 0, smsList: [], deliveredCount: 0, notDeliveredCount: 0, sendCount: 0 };
     try {
         const res = await smsService.smsGetList({ userId: id, page: 1, limit: 10 });
@@ -72,6 +75,21 @@ export async function getServerSideProps(context) {
         }
     } catch (e) {
         reportByDate = { count: 0, smsList: [], deliveredCount: 0, notDeliveredCount: 0, sendCount: 0 };
+=======
+    // Fetch SMS report data using SSR-compatible httpRequest
+    let reportByDate = { count: 0, smsList: [] };
+    try {
+        const reportResponse = await httpRequest.get('sms', {
+            params: { page: 1, limit: 10 },
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        reportByDate = reportResponse || { count: 0, smsList: [] };
+    } catch (error) {
+        console.error('Error fetching SMS report:', error);
+        // Keep default empty data on error
+>>>>>>> master
     }
 
     return {
