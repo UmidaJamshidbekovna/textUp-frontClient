@@ -18,6 +18,8 @@ const SmsPage = ({
 
 
 
+
+
     return (
         <MainLayout user={user}>
             <SendSms
@@ -44,10 +46,17 @@ export async function getServerSideProps(context) {
     const limit = context.query.limit ?? 10;
     const groupId = context.query?.groupId;
 
+
+
+    let contactsUrl = `contacts?userId=${id}&page=${page}&limit=${limit}`;
+    if (groupId) {
+        contactsUrl += `&groupId=${groupId}`;
+    }
+
     const urls = [
         `users/${id}`,
         `groups?userId=${id}&page=${page}&limit=${limit}`,
-        `contacts?userId=${id}&page=${page}&limit=${limit}`,
+        contactsUrl,
         `templates?userId=${id}&page=${page}&limit=${limit}`,
     ];
 
@@ -69,8 +78,10 @@ export async function getServerSideProps(context) {
     // Fetch SMS report data using SSR-compatible httpRequest
     let reportByDate = { count: 0, smsList: [] };
     try {
+        const params = { page: 1, limit: 10 };
+        if (groupId) params.groupId = groupId;
         const reportResponse = await httpRequest.get('sms', {
-            params: { page: 1, limit: 10 },
+            params,
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

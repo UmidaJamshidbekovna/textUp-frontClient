@@ -33,7 +33,7 @@ const SingleFileDragInput = ({
     }, []);
 
     const downloadFile = async (file) => {
-        console.log(file)
+
         if (file?.file) {
             try {
                 const blob = new Blob([file.file], { type: file.file.type });

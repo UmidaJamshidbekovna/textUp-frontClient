@@ -49,11 +49,11 @@ const ReportByDate = ({
                 })
             },
         },
-        params: {
-            userId: user?.id,
-            page,
-            limit,
-        },
+        params: (() => {
+            const p = { userId: user?.id, page, limit };
+            if (router.query?.groupId) p.groupId = router.query.groupId;
+            return p;
+        })(),
     })
 
     return (

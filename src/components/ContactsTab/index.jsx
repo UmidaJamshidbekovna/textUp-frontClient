@@ -87,14 +87,18 @@ const ContactsTab = ({
     });
 
     const { isLoading, refetch } = useContactsGetList({
-        params: {
-            userId: user?.id,
-            page,
-            limit,
-            status: apiKeys?.[tabState],
-            search: filters.search,
-            groupId: group?.id,
-        },
+        params: (() => {
+            const p = {
+                userId: user?.id,
+                page,
+                limit,
+                status: apiKeys?.[tabState],
+                search: filters.search,
+            };
+            // if (group?.id) p.groupId = group.id;
+            if (router.query?.groupId) p.groupId = router.query.groupId;
+            return p;
+        })(),
         queryParams: {
             initialData: SSRContacts,
             onSuccess: res => {
