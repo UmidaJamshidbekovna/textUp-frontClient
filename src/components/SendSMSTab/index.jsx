@@ -9,11 +9,10 @@ import CustomTextInput from '../Inputs/CustomTextInput';
 import classNames from 'classnames';
 import RadioInput from '../Inputs/RadioInput';
 import PhoneNumberInput from '../Inputs/PhoneNumberInput';
-import { useGroupsGetList } from '@/services/groups.service';
 import useCustomToast from '@/hooks/useCustomToast';
-import { useTemplatesGetList } from '@/services/templates.service';
-import MultiSelect from '../Inputs/MultiSelect';
 import { useSmsCreateMutation } from '@/services/sms.service';
+import { useSendSMSData } from './hook/useSendSMSData';
+
 
 const initialData = {
     "message": "",
@@ -23,6 +22,9 @@ const initialData = {
     "groupId": "",
     "name": "",
     "plannedTime": "",
+    "templates": "",
+    "phone": "",
+    "nicknameId": "",
 }
 
 const SendSMSTab = ({
@@ -37,28 +39,16 @@ const SendSMSTab = ({
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
     const { t } = useTranslation()
 
-    const { data: groupsData } = useGroupsGetList({
-        params: {
-            userId,
-            page: 1,
-            limit: groupsCount,
-        },
-        queryParams: {
-            onError: err => {
-                errorToast(`${err?.status}, ${err?.data?.error}`)
-                console.log(err)
-            },
-            enabled: !!userId,
-        },
+
+    const { groupsData, templatesData, nickNamesData, isLoading } = useSendSMSData({
+        user,
+        groupsCount,
+        templatesCount
     })
 
-    const { data: templatesData } = useTemplatesGetList({
-        params: {
-            page: 1,
-            limit: templatesCount,
-            userId,
-        },
-    })
+    console.log('nickNamesData', nickNamesData)
+    console.log('templatesData', templatesData)
+
 
     const { mutate: sendSmsMutate, isLoading: sendLoading } = useSmsCreateMutation({
         onSuccess: (data) => {
@@ -79,12 +69,17 @@ const SendSMSTab = ({
             templateId: state?.templateId,
             groupId: state?.groupId?.id,
             name: state?.name,
+            nicknameId: state?.nicknameId?.id,
             plannedTime: state.shipment == "scheduledShipment" ? state?.date + " " + state?.time : "",
             userId,
             ...phoneOrRec,
         }
         sendSmsMutate(data)
     }
+
+
+
+
 
     return (
         <div className={styles.sendSMS}>
@@ -96,7 +91,11 @@ const SendSMSTab = ({
                     <div className={styles.btns}>
 
                         <Button
-                            onClick={() => setTabState("byGroups")}
+                            onClick={() => {
+                                setTabState("byGroups")
+                                setState(initialData)
+                            }
+                            }
                             className={styles.btn}
                             variant={tabState == "byGroups" ? "solid" : "outline"}
                         >
@@ -104,7 +103,10 @@ const SendSMSTab = ({
                         </Button>
 
                         <Button
-                            onClick={() => setTabState("byNumber")}
+                            onClick={() => {
+                                setTabState("byNumber")
+                                setState(initialData)
+                            }}
                             className={styles.btn}
                             variant={tabState == "byNumber" ? "solid" : "outline"}
                         >
@@ -117,6 +119,7 @@ const SendSMSTab = ({
 
                 </div>
 
+                {/* ========================== by Groups ========================== */}
                 {tabState == "byGroups"
                     ? <form onSubmit={handleSubmit} className={styles.form}>
 
@@ -131,12 +134,12 @@ const SendSMSTab = ({
                                     </Flex>
                                 </Link>
                             </Flex>
-
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, nickname: e }))}
-                                options={[]}
-                                value={state?.nickname}
+                                onChange={(e) => setState(old => ({ ...old, nicknameId: e }))}
+                                options={nickNamesData?.nickNames ?? []}
+                                value={state?.nicknameId}
                                 placeholder={t("selectNickname")}
+                                selectKey='name'
                             />
 
                         </div>
@@ -217,7 +220,14 @@ const SendSMSTab = ({
                             </Flex>
 
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, templates: e, templateId: e.id }))}
+                                onChange={(template) => {
+                                    setState(old => ({
+                                        ...old,
+                                        templates: template,
+                                        templateId: template.id,
+                                        message: template?.content || old.message
+                                    }))
+                                }}
                                 options={templatesData?.templates ?? []}
                                 value={state?.templates}
                                 placeholder={t("selectTemplate")}
@@ -245,6 +255,7 @@ const SendSMSTab = ({
                         <Button type='submit' className={styles.sendBtn}>{t("send")}</Button>
 
                     </form>
+                    /* ========================== by Number ========================== */
                     : <form onSubmit={handleSubmit} className={styles.form}>
 
                         <div className={classNames(styles.drawerInp, styles.fullWidth)}>
@@ -260,11 +271,13 @@ const SendSMSTab = ({
                             </Flex>
 
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, nickname: e }))}
-                                options={[]}
-                                value={state?.email}
+                                onChange={(e) => setState(old => ({ ...old, nicknameId: e }))}
+                                options={nickNamesData?.nickNames ?? []}
+                                value={state?.nicknameId}
                                 placeholder={t("selectNickname")}
+                                selectKey='name'
                             />
+
 
                         </div>
 
@@ -291,7 +304,15 @@ const SendSMSTab = ({
                             </Flex>
 
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, templates: e, templateId: e.id }))}
+                                onChange={(template) => {
+                                    console.log('Selected template:', template)
+                                    setState(old => ({
+                                        ...old,
+                                        templates: template,
+                                        templateId: template.id,
+                                        message: template?.content || old.message
+                                    }))
+                                }}
                                 options={templatesData?.templates ?? []}
                                 value={state?.templates}
                                 placeholder={t("selectTemplate")}
