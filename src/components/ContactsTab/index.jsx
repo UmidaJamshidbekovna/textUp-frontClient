@@ -1,6 +1,6 @@
 import useTranslation from 'next-translate/useTranslation'
 import styles from './styles.module.scss'
-import { Button, InputGroup, useDisclosure } from '@chakra-ui/react'
+import { Button, InputGroup, Text, useDisclosure } from '@chakra-ui/react'
 import { FiDownload, FiPlus } from 'react-icons/fi'
 import CustomTextInput from '../Inputs/CustomTextInput'
 import { CiSearch } from "react-icons/ci";
@@ -18,12 +18,13 @@ import { TbEdit } from "react-icons/tb";
 import CheckedSomeCheckboxIcon from 'public/icons/checkedSomeCheckboxIcon'
 import CustomDeleteModal from '../CustomDeleteModal'
 import AddContactModal from './AddContactModal'
-import { useContactDeleteMutation, useContactEdit, useContactsDeleteMultipleMutation, useContactsExport, useContactsGetList } from '@/services/contacts.service'
-import useCustomToast from '@/hooks/useCustomToast'
 import { ImportContacts } from './ImportContacts'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { MdLock } from "react-icons/md";
 import { MdLockOpen } from "react-icons/md";
+import { IoArrowBack } from "react-icons/io5";
+import { useContactsTabData } from './hook/useContactsTabData';
+import Header from '../Header'
 
 const btns = ({ tabState = "", props, deleteFn, editFn, inBlackList, lockOpen }) => {
     if (tabState == "blocked") {
@@ -44,22 +45,6 @@ const btns = ({ tabState = "", props, deleteFn, editFn, inBlackList, lockOpen })
     }
 }
 
-const apiKeys = {
-    active: "active",
-    inactive: "inactive",
-    banned: "cancelled",
-    blocked: "blocked",
-}
-
-const expectedData = {
-    active: 0,
-    blocked: 0,
-    cancelled: 0,
-    contacts: [],
-    count: 0,
-    inactive: 0,
-}
-
 const ContactsTab = ({
     contactsTab,
     SSRContacts,
@@ -67,18 +52,9 @@ const ContactsTab = ({
     group,
     user,
 }) => {
-    const { successToast, errorToast, infoToast } = useCustomToast()
     const router = useRouter()
-    const page = router.query?.page ?? 1
-    const limit = router.query?.limit ?? 10
-    const [chakraData, setChakraData] = useState(SSRContacts || expectedData)
     const { t } = useTranslation()
     const tabState = router.query.contactsTab || contactsTab || "all"
-    const [confirmClicked, setConfirmClicked] = useState(false);
-    const [selectedUsers, setSelectedUsers] = useState([])
-    const [deleteState, setDeleteState] = useState({})
-    const [objId, setObjId] = useState("")
-    const [filters, setFilters] = useState({ search: "" })
     const { isOpen: isOpenCustomModal, onOpen: onOpenCustomModal, onClose: onCloseCustomModal } = useDisclosure();
     const { isOpen: isOpenDeleteModal, onOpen: onOpenDeleteModal, onClose: onCloseDeleteModal } = useDisclosure({
         onClose: () => {
@@ -86,64 +62,30 @@ const ContactsTab = ({
         }
     });
 
-    const { isLoading, refetch } = useContactsGetList({
-        params: (() => {
-            const p = {
-                userId: user?.id,
-                page,
-                limit,
-                status: apiKeys?.[tabState],
-                search: filters.search,
-            };
-            // if (group?.id) p.groupId = group.id;
-            if (router.query?.groupId) p.groupId = router.query.groupId;
-            return p;
-        })(),
-        queryParams: {
-            initialData: SSRContacts,
-            onSuccess: res => {
-                setChakraData(res ?? [])
-            },
-            onError: err => {
-                errorToast(`${err?.status}, ${err?.data?.error}`)
-                console.log(err)
-            },
-            enabled: !!user?.id,
-        },
-    })
-
-    const { mutate: editMutate, isLoading: editLoading } = useContactEdit({
-        onSuccess: res => {
-            refetch()
-            successToast()
-        },
-        onError: err => {
-            errorToast(`${err?.status}, ${err?.data?.error}`)
-            console.log(err)
-        },
-    })
-
-    const { mutate, isLoading: deleteLoading } = useContactDeleteMutation({
-        onSuccess: res => {
-            refetch()
-            successToast()
-        },
-        onError: err => {
-            errorToast(`${err?.status}, ${err?.data?.error}`)
-            console.log(err)
-        },
-    })
-
-    const { mutate: multipleDeleteMutate, isLoading: isMultipleDeleteLoading } = useContactsDeleteMultipleMutation({
-        onSuccess: res => {
-            refetch()
-            successToast()
-        },
-        onError: err => {
-            errorToast(`${err?.status}, ${err?.data?.error}`)
-            console.log(err)
-        },
-    })
+    // Use custom hook for all API calls and state management
+    const {
+        chakraData,
+        isLoading,
+        confirmClicked,
+        setConfirmClicked,
+        selectedUsers,
+        setSelectedUsers,
+        deleteState,
+        setDeleteState,
+        objId,
+        setObjId,
+        filters,
+        setFilters,
+        refetch,
+        editMutate,
+        editLoading,
+        mutate,
+        deleteLoading,
+        multipleDeleteMutate,
+        isMultipleDeleteLoading,
+        download,
+        isDownloadLoading,
+    } = useContactsTabData({ SSRContacts, group, user });
 
     const handleTabClick = (el) => {
         router.push({
@@ -213,14 +155,14 @@ const ContactsTab = ({
         },
     ], [chakraData])
 
-    const { mutate: downlad, isLoading: isDownloadLoading } = useContactsExport({ userId: user?.id });
-
     return (
         <div className={styles.contacts}>
 
             <div className={styles.setcion}>
 
                 <div className={styles.head}>
+
+
 
                     <div className={styles.headBtns}>
 
@@ -234,7 +176,7 @@ const ContactsTab = ({
                         <ImportContacts refetch={refetch} user={user} />
 
                         <Button
-                            onClick={() => downlad()}
+                            onClick={() => download()}
                             className={styles.addContact}
                             variant={"outline"}
                             isLoading={isDownloadLoading}
