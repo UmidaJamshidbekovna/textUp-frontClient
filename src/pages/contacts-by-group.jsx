@@ -22,16 +22,14 @@ const ContactsByGroupPage = ({
     return (
         <MainLayout user={user}>
             <Flex direction={'column'} padding={'32px 32px 0'}>
-                <Header title={group.id ? t("contactsByGroup", { name: `"${group?.name}"` ?? "" }) : t("sendSms")} user={user} backButton backButtonUrl={'/user/send-sms?tab=groups'} />
+                <Header title={t("contactsByGroup", { name: `"${group?.name}"` ?? "" })} user={user} backButton backButtonUrl={'/user/send-sms?tab=groups'} />
                 <ContactsTab
                     tab={tab}
                     contactsTab={contactsTab}
                     group={group}
                     groups={groups}
-                    contacts={contacts}
+                    SSRContacts={contacts}
                     user={user}
-                    templates={templates}
-                    showBackButton={true}
                 />
             </Flex>
         </MainLayout >
@@ -66,7 +64,6 @@ export async function getServerSideProps(context) {
         `users/${id}`,
         `groups?userId=${id}&page=${page}&limit=${limit}`,
         contactsUrl,
-        `templates?userId=${id}&page=${page}&limit=${limit}`,
     ];
 
     if (groupId) {
@@ -75,7 +72,7 @@ export async function getServerSideProps(context) {
 
     const responses = await fetchMultipleUrls(urls, accessToken, context);
 
-    const [user, groups, contacts, templates, maybeGroup] = responses;
+    const [user, groups, contacts, maybeGroup] = responses;
 
     const userData = {
         phone: user?.phone || cookies?.phone || "",
@@ -92,7 +89,6 @@ export async function getServerSideProps(context) {
             user: userData,
             groups: groups ?? {},
             contacts: contacts ?? {},
-            templates: templates ?? {},
         },
     };
 }
