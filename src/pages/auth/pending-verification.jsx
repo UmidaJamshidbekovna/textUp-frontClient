@@ -26,14 +26,7 @@ export async function getServerSideProps(context) {
         user,
     ] = await fetchMultipleUrls(urls, accessToken, context)
 
-    if (user?.status == "active") {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
-    }
+    // Redirect logic removed - handled by middleware to prevent loops
 
     return {
         props: {

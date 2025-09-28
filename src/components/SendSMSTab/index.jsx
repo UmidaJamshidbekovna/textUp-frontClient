@@ -46,8 +46,7 @@ const SendSMSTab = ({
         templatesCount
     })
 
-    console.log('nickNamesData', nickNamesData)
-    console.log('templatesData', templatesData)
+
 
 
     const { mutate: sendSmsMutate, isLoading: sendLoading } = useSmsCreateMutation({
@@ -305,7 +304,7 @@ const SendSMSTab = ({
 
                             <CustomSelect
                                 onChange={(template) => {
-                                    console.log('Selected template:', template)
+
                                     setState(old => ({
                                         ...old,
                                         templates: template,
