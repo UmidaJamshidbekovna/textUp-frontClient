@@ -303,5 +303,6 @@
   "yourMessageHasBeenSentSuccessfully": "Your message has been sent successfully!",
   "sending": "Sending...",
   "ok": "OK",
-  "price": "Price"
+  "price": "Price",
+  "Please fill all required fields": "Please fill all required fields"
 }

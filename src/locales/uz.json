@@ -185,14 +185,14 @@
   "exampleAlphaNames": "Nik: Textup",
   "alphaNameRequirements": "Alfa nomi - eng ko'pi bilan 11 ta belgidan iborat bo'lishi lozim va so'zlar orasida bo'sh joy qolmasligi kerak. Faqat lotin harflarini ishlatish mumkin.",
   "exampleAlphaNamesList": "Namuna: Textup, ESKIZ, textup, Textup.uz, Eskizuz, EskizUZ, Eskiz_MEDIA, ESKIZ_MEDIA",
-  "enterBusinessActivity": "Korhonangizning faoliyati turini kiriting",
+  "enterBusinessActivity": "Korxonangizning faoliyati turini kiriting",
   "enterBusinessActivityExample": "Veb-saytlarni ishlab chiqish, xosting, domenni ro'yxatdan o'tkazish xizmatlari",
   "applicationForNik": "Nik olish uchun ariza",
-  "applicationAcceptedAfterPayment": "Ariza faqat to'ovdan so'ng qabul qilinadi. Tolovni amalga oshirayotganda, to'lov maqsadi albatta: 'за границей каналов для передачи СМС-сообщений' - deb ko'rsatilishi lozim",
-  "enterOrganizationLink": "Tashkilotingiz haqida malumot topish uchun biron bir havolani kiriting (telegram kanal, vab-sayt, telegram bot, facebook, instagram)",
+  "applicationAcceptedAfterPayment": "Ariza faqat to'lovdan so'ng qabul qilinadi. To'lo'vni amalga oshirayotganda, to'lov maqsadi albatta: 'за границей каналов для передачи СМС-сообщений' - deb ko'rsatilishi lozim",
+  "enterOrganizationLink": "Tashkilotingiz haqida ma'lumot topish uchun biron bir havolani kiriting (telegram kanal, vab-sayt, telegram bot, facebook, instagram)",
   "uploadCertificateOrLicense": "Tashkilotingizning Guvoxnoma yoki Litsenziyasi ni yuklab qoying",
   "uploadFile": "fayilni yuklash",
-  "close": "yopish",
+  "close": "Yopish",
   "dropFilesHereOrClickToUpload": "'{{formats}}' formatli fayllarni shu yerga torting yoki yuklash uchun bosing. Maksimal hajm: {{maxSizeInMB}}MB",
   "addContact": "Kontakt qo’shish",
   "uploadContacts": "Kontaktlarni yuklash",
@@ -303,5 +303,6 @@
   "yourMessageHasBeenSentSuccessfully": "Xabaringiz muvaffaqiyatli yuborildi!",
   "sending": "Yuborilmoqda...",
   "ok": "OK",
-  "price": "Narxi"
+  "price": "Narxi",
+  "Please fill all required fields": "Barcha majburiy maydonlarni to'ldiring"
 }

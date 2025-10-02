@@ -303,5 +303,6 @@
   "yourMessageHasBeenSentSuccessfully": "Ваше сообщение успешно отправлено!",
   "sending": "Отправка...",
   "ok": "ОК",
-  "price": "Цена"
+  "price": "Цена",
+  "Please fill all required fields": "Пожалуйста, заполните все обязательные поля"
 }

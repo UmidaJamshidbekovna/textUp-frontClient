@@ -4,7 +4,7 @@ import { Button, Flex, InputGroup, ModalBody, ModalCloseButton, ModalFooter, Mod
 import CustomModal from '../Modals/CustomModal'
 import CustomTextInput from '../Inputs/CustomTextInput'
 import { useState } from 'react'
-import SingleFileDragInput from '../Inputs/SingleFileDragInput'
+// import SingleFileDragInput from '../Inputs/SingleFileDragInput'
 import { useRouter } from 'next/router'
 import { getCookie } from 'cookies-next'
 import useCustomToast from '@/hooks/useCustomToast'
@@ -27,14 +27,13 @@ const ApplicationForNick = () => {
         name: "",
         companyType: "",
         companyLink: "",
-        price: "",
     })
     const { errorToast, successToast } = useCustomToast()
 
     const { mutate: createNick, isLoading: isCreating } = useNickNameCreateMutation({
         onSuccess: () => {
             successToast()
-            setState({ name: "", companyType: "", companyLink: "", price: "" })
+            setState({ name: "", companyType: "", companyLink: "" })
             onCloseCustomModal()
         },
         onError: (err) => {
@@ -53,7 +52,6 @@ const ApplicationForNick = () => {
             userId,
             companyType: state.companyType,
             companyLink: state.companyLink,
-            price: Number(state.price) || 0,
         }
         createNick(body)
     }
@@ -135,19 +133,13 @@ const ApplicationForNick = () => {
                             value={state.companyLink}
                         />
 
-                        <CustomTextInput
-                            label={t("price")}
-                            onChange={(e) => setState(old => ({ ...old, price: e.target.value }))}
-                            value={state.price}
-                        />
-
-                        <InputGroup className={styles.drawerInp}>
+                        {/* <InputGroup className={styles.drawerInp}>
 
                             <Text>{t("uploadCertificateOrLicense")}</Text>
 
                             <SingleFileDragInput id={"uploadCertificateOrLicense"} />
 
-                        </InputGroup>
+                        </InputGroup> */}
 
                     </ModalBody>
 

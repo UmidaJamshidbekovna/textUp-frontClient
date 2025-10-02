@@ -136,7 +136,10 @@ const AddContactModal = ({
                                     value={state?.group}
                                     placeholder={t("selectGroup")}
                                     selectKey='name'
+                                    menuPosition='top'
+
                                 />
+
 
                                 {/* <div className={styles.agreements}> */}
                                 {/* <label>
