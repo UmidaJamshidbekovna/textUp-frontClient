@@ -304,5 +304,7 @@
   "sending": "Sending...",
   "ok": "OK",
   "price": "Price",
-  "Please fill all required fields": "Please fill all required fields"
+  "Please fill all required fields": "Please fill all required fields",
+  "selectDateRange": "Select Date Range",
+  "selectDates": "Select dates"
 }

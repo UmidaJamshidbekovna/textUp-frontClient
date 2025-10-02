@@ -304,5 +304,7 @@
   "sending": "Yuborilmoqda...",
   "ok": "OK",
   "price": "Narxi",
-  "Please fill all required fields": "Barcha majburiy maydonlarni to'ldiring"
+  "Please fill the required fields": "Barcha majburiy maydonlarni to'ldiring",
+  "selectDateRange": "Sana oralig'ini tanlang",
+  "selectDates": "Sanalarni tanlang"
 }
