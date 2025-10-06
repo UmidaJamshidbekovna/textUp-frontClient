@@ -40,7 +40,7 @@ build_image_prod:
     - make build-image NODE_ENV=production TAG=$CI_PIPELINE_IID PROJECT_NAME=$CI_PROJECT_NAMESPACE REGISTRY=$CI_REGISTRY ENV_TAG=latest
     - make push-image TAG=$CI_PIPELINE_IID PROJECT_NAME=$CI_PROJECT_NAMESPACE REGISTRY=$CI_REGISTRY ENV_TAG=latest
   only:
-    - main
+    - master
 
 deploy_to_prod:
   image: registry.textup.uz/devops1/helm-chart:dind
@@ -51,5 +51,5 @@ deploy_to_prod:
     - helm repo add $HELM_REPO_NAME $HELM_REGISTRY_PATH --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD
     - helm upgrade --install $DEPLOYMENT $HELM_REPO_NAME/$HELM_REPO_NAME --set=image.tag=$CI_PIPELINE_IID --values .helm/values-prod.yaml -n $PROD_NAMESPACE
   only:
-    - main
+    - master
 
