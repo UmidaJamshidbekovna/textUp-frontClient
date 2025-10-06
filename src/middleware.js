@@ -13,6 +13,7 @@ export async function middleware(request) {
         "Content-Type": "application/json",
       },
     });
+    
 
     const data = await res.json();
 
