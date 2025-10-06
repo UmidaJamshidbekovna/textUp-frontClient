@@ -1,11 +1,14 @@
 import MainLayout from "@/Layouts/MainLayout"
-import SendSms from "@/modules/SendSms"
+import ContactsTab from "@/components/ContactsTab"
+import Header from "@/components/Header"
 import { fetchMultipleUrls } from "@/services/fetchMultipleUrls"
 import httpRequest from "@/services/httpRequest"
+import { Flex } from "@chakra-ui/react"
+import useTranslation from "next-translate/useTranslation"
+import { useRouter } from "next/router"
 import { parseCookies } from "nookies"
 
-
-const SmsPage = ({
+const ContactsByGroupPage = ({
     tab,
     contactsTab,
     group,
@@ -13,30 +16,27 @@ const SmsPage = ({
     groups,
     contacts,
     templates,
-    reportByDate,
 }) => {
-
-
-
-
+    const { t } = useTranslation()
 
     return (
         <MainLayout user={user}>
-            <SendSms
-                tab={tab}
-                contactsTab={contactsTab}
-                group={group}
-                groups={groups}
-                contacts={contacts}
-                user={user}
-                templates={templates}
-                reportByDate={reportByDate}
-            />
-        </MainLayout>
+            <Flex direction={'column'} padding={'32px 32px 0'}>
+                <Header title={t("contactsByGroup", { name: `"${group?.name}"` ?? "" })} user={user} backButton backButtonUrl={'/user/send-sms?tab=groups'} />
+                <ContactsTab
+                    tab={tab}
+                    contactsTab={contactsTab}
+                    group={group}
+                    groups={groups}
+                    SSRContacts={contacts}
+                    user={user}
+                />
+            </Flex>
+        </MainLayout >
     )
 }
 
-export default SmsPage
+export default ContactsByGroupPage
 
 export async function getServerSideProps(context) {
     const cookies = parseCookies(context);
@@ -46,7 +46,14 @@ export async function getServerSideProps(context) {
     const limit = context.query.limit ?? 10;
     const groupId = context.query?.groupId;
 
-
+    if (!groupId) {
+        return {
+            redirect: {
+                destination: '/user/send-sms?tab=groups',
+                permanent: false,
+            },
+        }
+    }
 
     let contactsUrl = `contacts?userId=${id}&page=${page}&limit=${limit}`;
     if (groupId) {
@@ -57,7 +64,6 @@ export async function getServerSideProps(context) {
         `users/${id}`,
         `groups?userId=${id}&page=${page}&limit=${limit}`,
         contactsUrl,
-        `templates?userId=${id}&page=${page}&limit=${limit}`,
     ];
 
     if (groupId) {
@@ -66,7 +72,7 @@ export async function getServerSideProps(context) {
 
     const responses = await fetchMultipleUrls(urls, accessToken, context);
 
-    const [user, groups, contacts, templates, maybeGroup] = responses;
+    const [user, groups, contacts, maybeGroup] = responses;
 
     const userData = {
         phone: user?.phone || cookies?.phone || "",
@@ -75,33 +81,14 @@ export async function getServerSideProps(context) {
         ...user,
     };
 
-    // Fetch SMS report data using SSR-compatible httpRequest
-    let reportByDate = { count: 0, smsList: [] };
-    try {
-        const params = { page: 1, limit: 10 };
-        if (groupId) params.groupId = groupId;
-        const reportResponse = await httpRequest.get('sms', {
-            params,
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-        reportByDate = reportResponse || { count: 0, smsList: [] };
-    } catch (error) {
-        console.error('Error fetching SMS report:', error);
-
-    }
-
     return {
         props: {
-            tab: context?.query?.tab ?? "",
-            contactsTab: context?.query?.contactsTab ?? "",
+            tab: context.query.tab ?? "",
+            contactsTab: context.query.contactsTab ?? "",
             group: maybeGroup ?? {},
             user: userData,
             groups: groups ?? {},
             contacts: contacts ?? {},
-            templates: templates ?? {},
-            reportByDate: reportByDate ?? { count: 0, smsList: [] }
         },
     };
 }

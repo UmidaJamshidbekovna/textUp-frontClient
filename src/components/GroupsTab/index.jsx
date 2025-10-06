@@ -200,7 +200,7 @@ function GroupsTab({ SSRGroups, user }) {
                     isLoading={isLoading}
                     customCellRender={{
                         name: {
-                            render: (gr) => <Button variant={"link"} onClick={() => router.push(`/user/send-sms?tab=contacts&groupId=${gr.id}`)}>{gr?.name ? gr?.name : "-"}</Button>,
+                            render: (gr) => <Button variant={"link"} onClick={() => router.push(`/contacts-by-group?groupId=${gr.id}`)}>{gr?.name ? gr?.name : "-"}</Button>,
                         },
                     }}
                 />

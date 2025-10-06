@@ -12,22 +12,44 @@ const MultiSelect = ({
     formatOption,
     inpGr,
     value = [],
+    menuPosition = 'bottom', // New prop: 'top' or 'bottom'
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectRef = useRef(null);
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (selectRef.current && !selectRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
+        if (isOpen) {
+            // Close on click outside
+            const handleClickOutside = (event) => {
+                if (selectRef.current && !selectRef.current.contains(event.target)) {
+                    setIsOpen(false);
+                }
+            };
 
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
+            // Close on escape key
+            const handleKeyDown = (event) => {
+                if (event.key === 'Escape') {
+                    setIsOpen(false);
+                }
+            };
+
+            // Close on scroll
+            const handleScroll = () => {
+                setIsOpen(false);
+            };
+
+            // Use capture phase for better event handling
+            document.addEventListener('mousedown', handleClickOutside, true);
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('scroll', handleScroll, true);
+
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside, true);
+                document.removeEventListener('keydown', handleKeyDown);
+                document.removeEventListener('scroll', handleScroll, true);
+            };
+        }
+    }, [isOpen]);
 
     const getDisplayText = (option) => {
         if (formatOption) return formatOption(option);
@@ -98,7 +120,14 @@ const MultiSelect = ({
                     />
                 </svg>
             </div>
-            <div className={classNames(styles.optionsContainer, { [styles.open]: isOpen })}>
+            <div className={classNames(
+                styles.optionsContainer,
+                {
+                    [styles.open]: isOpen,
+                    [styles.top]: menuPosition === 'top',
+                    [styles.bottom]: menuPosition === 'bottom'
+                }
+            )}>
                 {options.map((option) => (
                     <div
                         key={option.id}

@@ -1,7 +1,7 @@
 import useTranslation from 'next-translate/useTranslation'
 import styles from './styles.module.scss'
-import { Button, Flex, Text } from '@chakra-ui/react'
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { Button, Flex, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from '@chakra-ui/react'
+import { FaExternalLinkAlt, FaCheckCircle } from "react-icons/fa";
 import { useState } from 'react'
 import Link from 'next/link'
 import CustomSelect from '../Inputs/CustomSelect';
@@ -9,11 +9,10 @@ import CustomTextInput from '../Inputs/CustomTextInput';
 import classNames from 'classnames';
 import RadioInput from '../Inputs/RadioInput';
 import PhoneNumberInput from '../Inputs/PhoneNumberInput';
-import { useGroupsGetList } from '@/services/groups.service';
 import useCustomToast from '@/hooks/useCustomToast';
-import { useTemplatesGetList } from '@/services/templates.service';
-import MultiSelect from '../Inputs/MultiSelect';
 import { useSmsCreateMutation } from '@/services/sms.service';
+import { useSendSMSData } from './hook/useSendSMSData';
+
 
 const initialData = {
     "message": "",
@@ -23,6 +22,9 @@ const initialData = {
     "groupId": "",
     "name": "",
     "plannedTime": "",
+    "templates": "",
+    "phone": "",
+    "nicknameId": "",
 }
 
 const SendSMSTab = ({
@@ -34,47 +36,49 @@ const SendSMSTab = ({
     const { errorToast, successToast } = useCustomToast()
     const [tabState, setTabState] = useState("byGroups")
     const [state, setState] = useState(initialData)
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
     const { t } = useTranslation()
 
-    const { data: groupsData } = useGroupsGetList({
-        params: {
-            userId,
-            page: 1,
-            limit: groupsCount,
-        },
-        queryParams: {
-            onError: err => {
-                errorToast(`${err?.status}, ${err?.data?.error}`)
-                console.log(err)
-            },
-            enabled: !!userId,
-        },
+
+    const { groupsData, templatesData, nickNamesData, isLoading } = useSendSMSData({
+        user,
+        groupsCount,
+        templatesCount
     })
 
-    const { data: templatesData } = useTemplatesGetList({
-        params: {
-            page: 1,
-            limit: templatesCount,
-            userId,
-        },
-    })
 
-    const { mutate: sendSmsMutate, isLoading: sendLoading } = useSmsCreateMutation()
+
+
+    const { mutate: sendSmsMutate, isLoading: sendLoading } = useSmsCreateMutation({
+        onSuccess: (data) => {
+            setIsSuccessModalOpen(true)
+            setState(initialData) // Reset form after successful send
+        },
+        onError: (error) => {
+            errorToast(error?.data?.error_message || "Failed to send message")
+        }
+    })
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const phoneOrRec = tabState == "byGroups" ? ({ recipients: state?.recipients }) : ({ recipients: [`${state?.phone}`] })
         const data = {
             message: state?.message,
-            recipients: state?.recipients,
             userId: state?.userId,
             templateId: state?.templateId,
             groupId: state?.groupId?.id,
             name: state?.name,
+            nicknameId: state?.nicknameId?.id,
             plannedTime: state.shipment == "scheduledShipment" ? state?.date + " " + state?.time : "",
             userId,
+            ...phoneOrRec,
         }
         sendSmsMutate(data)
     }
+
+
+
+
 
     return (
         <div className={styles.sendSMS}>
@@ -86,7 +90,11 @@ const SendSMSTab = ({
                     <div className={styles.btns}>
 
                         <Button
-                            onClick={() => setTabState("byGroups")}
+                            onClick={() => {
+                                setTabState("byGroups")
+                                setState(initialData)
+                            }
+                            }
                             className={styles.btn}
                             variant={tabState == "byGroups" ? "solid" : "outline"}
                         >
@@ -94,7 +102,10 @@ const SendSMSTab = ({
                         </Button>
 
                         <Button
-                            onClick={() => setTabState("byNumber")}
+                            onClick={() => {
+                                setTabState("byNumber")
+                                setState(initialData)
+                            }}
                             className={styles.btn}
                             variant={tabState == "byNumber" ? "solid" : "outline"}
                         >
@@ -107,6 +118,7 @@ const SendSMSTab = ({
 
                 </div>
 
+                {/* ========================== by Groups ========================== */}
                 {tabState == "byGroups"
                     ? <form onSubmit={handleSubmit} className={styles.form}>
 
@@ -121,12 +133,12 @@ const SendSMSTab = ({
                                     </Flex>
                                 </Link>
                             </Flex>
-
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, nickname: e }))}
-                                options={[]}
-                                value={state?.nickname}
+                                onChange={(e) => setState(old => ({ ...old, nicknameId: e }))}
+                                options={nickNamesData?.nickNames ?? []}
+                                value={state?.nicknameId}
                                 placeholder={t("selectNickname")}
+                                selectKey='name'
                             />
 
                         </div>
@@ -207,7 +219,14 @@ const SendSMSTab = ({
                             </Flex>
 
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, templates: e, templateId: e.id }))}
+                                onChange={(template) => {
+                                    setState(old => ({
+                                        ...old,
+                                        templates: template,
+                                        templateId: template.id,
+                                        message: template?.content || old.message
+                                    }))
+                                }}
                                 options={templatesData?.templates ?? []}
                                 value={state?.templates}
                                 placeholder={t("selectTemplate")}
@@ -235,6 +254,7 @@ const SendSMSTab = ({
                         <Button type='submit' className={styles.sendBtn}>{t("send")}</Button>
 
                     </form>
+                    /* ========================== by Number ========================== */
                     : <form onSubmit={handleSubmit} className={styles.form}>
 
                         <div className={classNames(styles.drawerInp, styles.fullWidth)}>
@@ -250,11 +270,13 @@ const SendSMSTab = ({
                             </Flex>
 
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, nickname: e }))}
-                                options={[]}
-                                value={state?.email}
+                                onChange={(e) => setState(old => ({ ...old, nicknameId: e }))}
+                                options={nickNamesData?.nickNames ?? []}
+                                value={state?.nicknameId}
                                 placeholder={t("selectNickname")}
+                                selectKey='name'
                             />
+
 
                         </div>
 
@@ -281,7 +303,15 @@ const SendSMSTab = ({
                             </Flex>
 
                             <CustomSelect
-                                onChange={(e) => setState(old => ({ ...old, templates: e, templateId: e.id }))}
+                                onChange={(template) => {
+
+                                    setState(old => ({
+                                        ...old,
+                                        templates: template,
+                                        templateId: template.id,
+                                        message: template?.content || old.message
+                                    }))
+                                }}
                                 options={templatesData?.templates ?? []}
                                 value={state?.templates}
                                 placeholder={t("selectTemplate")}
@@ -306,12 +336,43 @@ const SendSMSTab = ({
 
                         </div>
 
-                        <Button type='submit' className={styles.sendBtn}>{t("send")}</Button>
+                        <Button type='submit' className={styles.sendBtn} isLoading={sendLoading} loadingText={t("sending")}>
+                            {t("send")}
+                        </Button>
 
                     </form>
                 }
 
             </div>
+
+            {/* Success Modal */}
+            <Modal isOpen={isSuccessModalOpen} onClose={() => setIsSuccessModalOpen(false)} isCentered>
+                <ModalOverlay />
+                <ModalContent maxW="400px" mx={4}>
+                    <ModalHeader textAlign="center" pb={2}>
+                        <Flex direction="column" align="center" gap={3}>
+                            <FaCheckCircle size={48} color="#48BB78" />
+                            <Text fontSize="xl" fontWeight="bold" color="green.500">
+                                {t("success")}
+                            </Text>
+                        </Flex>
+                    </ModalHeader>
+                    <ModalBody textAlign="center" py={4}>
+                        <Text fontSize="md" color="gray.600">
+                            {t("yourMessageHasBeenSentSuccessfully")}
+                        </Text>
+                    </ModalBody>
+                    <ModalFooter justifyContent="center" pt={2}>
+                        <Button
+                            colorScheme="green"
+                            onClick={() => setIsSuccessModalOpen(false)}
+                            px={8}
+                        >
+                            {t("ok")}
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
 
         </div>
     )

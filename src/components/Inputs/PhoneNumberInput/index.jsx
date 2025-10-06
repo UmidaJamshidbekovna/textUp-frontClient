@@ -13,13 +13,12 @@ const PhoneNumberInput = ({
 
     return (
         <ReactInputMask
-            mask="+999 99 999 99 99"
+            mask={"+\\9\\9\\8 99 999 99 99"}
             maskChar={null}
-            value={value}
+            value={value ?? ""}
             onChange={onChange}
             disabled={disabled}
             className={styles.inputMask}
-            defaultValue={"+998"}
         >
             {(inputProps) => (
                 <Input
@@ -28,8 +27,9 @@ const PhoneNumberInput = ({
                     name={name}
                     id={name}
                     minH={"40px"}
-                    _focusVisible={{ outline: "none" }}
+                    _focusVisible={{ outline: "none", borderColor: "black", color: "black" }}
                     autoComplete="off"
+                    placeholder={"+998"}
                     {...props}
                 />
             )}

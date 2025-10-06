@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.textup.uz/textup/frontend-client
+  repository: registry.textup.uz/textup/front-client
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "test"

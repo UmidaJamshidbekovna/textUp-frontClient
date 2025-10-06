@@ -4,8 +4,11 @@ import { Button, Flex, InputGroup, ModalBody, ModalCloseButton, ModalFooter, Mod
 import CustomModal from '../Modals/CustomModal'
 import CustomTextInput from '../Inputs/CustomTextInput'
 import { useState } from 'react'
-import SingleFileDragInput from '../Inputs/SingleFileDragInput'
+// import SingleFileDragInput from '../Inputs/SingleFileDragInput'
 import { useRouter } from 'next/router'
+import { getCookie } from 'cookies-next'
+import useCustomToast from '@/hooks/useCustomToast'
+import { useNickNameCreateMutation } from '@/services/nickname.service'
 
 const items = [
     "beelineMonthlyFee",
@@ -20,7 +23,38 @@ const ApplicationForNick = () => {
     const router = useRouter()
     const { t } = useTranslation()
     const { isOpen: isOpenCustomModal, onOpen: onOpenCustomModal, onClose: onCloseCustomModal } = useDisclosure({ defaultIsOpen: router?.query?.modal === "open", onClose: () => closeModal() });
-    const [state, setState] = useState({})
+    const [state, setState] = useState({
+        name: "",
+        companyType: "",
+        companyLink: "",
+    })
+    const { errorToast, successToast } = useCustomToast()
+
+    const { mutate: createNick, isLoading: isCreating } = useNickNameCreateMutation({
+        onSuccess: () => {
+            successToast()
+            setState({ name: "", companyType: "", companyLink: "" })
+            onCloseCustomModal()
+        },
+        onError: (err) => {
+            errorToast(`${err?.status ?? ''} ${err?.data?.error ?? ''}`)
+        }
+    })
+
+    const handleSubmit = () => {
+        const userId = getCookie('id') || ""
+        if (!state.name || !state.companyType || !state.companyLink) {
+            errorToast(t('Please fill all required fields'))
+            return
+        }
+        const body = {
+            name: state.name,
+            userId,
+            companyType: state.companyType,
+            companyLink: state.companyLink,
+        }
+        createNick(body)
+    }
 
     const closeModal = () => {
         router.push({
@@ -83,32 +117,29 @@ const ApplicationForNick = () => {
 
                         <CustomTextInput
                             label={t("nickname") + "*"}
-                            // placeholder={t("title")}
-                            onChange={(e) => setState({ title: e.target.value })}
-                            value={state.title}
+                            onChange={(e) => setState(old => ({ ...old, name: e.target.value }))}
+                            value={state.name}
                         />
 
                         <CustomTextInput
                             label={t("enterBusinessActivity") + "*"}
-                            // placeholder={t("title")}
-                            onChange={(e) => setState({ title: e.target.value })}
-                            value={state.title}
+                            onChange={(e) => setState(old => ({ ...old, companyType: e.target.value }))}
+                            value={state.companyType}
                         />
 
                         <CustomTextInput
                             label={t("enterOrganizationLink") + "*"}
-                            // placeholder={t("title")}
-                            onChange={(e) => setState({ title: e.target.value })}
-                            value={state.title}
+                            onChange={(e) => setState(old => ({ ...old, companyLink: e.target.value }))}
+                            value={state.companyLink}
                         />
 
-                        <InputGroup className={styles.drawerInp}>
+                        {/* <InputGroup className={styles.drawerInp}>
 
                             <Text>{t("uploadCertificateOrLicense")}</Text>
 
                             <SingleFileDragInput id={"uploadCertificateOrLicense"} />
 
-                        </InputGroup>
+                        </InputGroup> */}
 
                     </ModalBody>
 
@@ -116,9 +147,9 @@ const ApplicationForNick = () => {
 
                         <Flex gap={"12px"} w={"100%"}>
 
-                            <Button onClick={() => onCloseCustomModal()} variant={"outline"} w={"50%"}>{t("close")}</Button>
+                            <Button onClick={() => onCloseCustomModal()} variant={"outline"} w={"50%"} >{t("close")}</Button>
 
-                            <Button w={"50%"}>{t("send")}</Button>
+                            <Button w={"50%"} onClick={handleSubmit} isLoading={isCreating}>{t("send")}</Button>
 
                         </Flex>
 

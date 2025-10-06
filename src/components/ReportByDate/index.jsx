@@ -2,7 +2,7 @@ import useTranslation from 'next-translate/useTranslation'
 import ChakraTable from '../ChakraTable'
 import styles from './styles.module.scss'
 import Link from 'next/link'
-import DatePicker from 'react-multi-date-picker'
+import DatePicker, { DateObject } from 'react-multi-date-picker'
 import { CiCalendar } from 'react-icons/ci'
 import CustomSelect from '../Inputs/CustomSelect'
 import { keys, statuses } from './initialData'
@@ -30,8 +30,8 @@ const ReportByDate = ({
     })
 
     const [filters, setFilters] = useState({
-        from: "",
-        to: "",
+        from_date: "",
+        to_date: "",
         status: "",
         type: "",
     })
@@ -42,19 +42,34 @@ const ReportByDate = ({
             onSuccess: res => {
                 setChakraData({
                     smsList: res?.smsList ?? [],
-                    count: res?.count ?? [],
-                    deliveredCount: res?.deliveredCount ?? [],
-                    notDeliveredCount: res?.notDeliveredCount ?? [],
-                    sendCount: res?.sendCount ?? [],
+                    count: res?.count ?? 0,
+                    deliveredCount: res?.deliveredCount ?? 0,
+                    notDeliveredCount: res?.notDeliveredCount ?? 0,
+                    sendCount: res?.sendCount ?? 0,
                 })
             },
         },
-        params: {
-            userId: user?.id,
-            page,
-            limit,
-        },
+        params: (() => {
+            const p = { userId: user?.id, page, limit };
+
+            // Add group ID if exists
+            if (router.query?.groupId) p.groupId = router.query.groupId;
+
+            // Add date filter based on range picker
+            if (filters.from_date && filters.to_date) {
+                p.from = filters.from_date;
+                p.to = filters.to_date;
+            }
+
+            // Add status filter
+            if (filters.status) {
+                p.status = filters.status;
+            }
+
+            return p;
+        })(),
     })
+
 
     return (
         <div className={styles.contacts}>
@@ -72,16 +87,35 @@ const ReportByDate = ({
                 <div className={styles.filters}>
 
                     <label className={styles.label}>
-                        {t("fromDate")}
+                        {t("selectDateRange")}
                         <div className={styles.inp}>
                             <CiCalendar fontSize={"20px"} />
                             <DatePicker
-                                value={filters.from}
-                                onChange={(e) => setFilters(old => ({ ...old, from: e?.format("YYYY-MM-DD") }))}
-                                placeholder={t("selectDate")}
+                                range
+                                value={
+                                    filters.from_date && filters.to_date
+                                        ? [
+                                            new DateObject({ date: filters.from_date, format: "YYYY-MM-DD" }),
+                                            new DateObject({ date: filters.to_date, format: "YYYY-MM-DD" })
+                                        ]
+                                        : null
+                                }
+                                onChange={(dateObjects) => {
+                                    if (dateObjects && dateObjects.length === 2 && dateObjects[0] && dateObjects[1]) {
+                                        const from_date = dateObjects[0].format("YYYY-MM-DD");
+                                        const to_date = dateObjects[1].format("YYYY-MM-DD");
+                                        setFilters(old => ({
+                                            ...old,
+                                            from_date,
+                                            to_date
+                                        }));
+                                    }
+                                }}
+                                placeholder={t("selectDateRange")}
                                 dateSeparator=" => "
+                                format="YYYY-MM-DD"
                                 style={{
-                                    width: "100px",
+                                    width: "250px",
                                     border: "none",
                                     fontWeight: "600",
                                     fontSize: "14px",
@@ -91,44 +125,6 @@ const ReportByDate = ({
                             />
                         </div>
                     </label>
-
-                    <label className={styles.label}>
-                        {t("toDate")}
-                        <div className={styles.inp}>
-                            <CiCalendar fontSize={"20px"} />
-                            <DatePicker
-                                value={filters.to}
-                                onChange={(e) => setFilters(old => ({ ...old, to: e?.format("YYYY-MM-DD") }))}
-                                placeholder={t("selectDate")}
-                                dateSeparator=" => "
-                                style={{
-                                    width: "100px",
-                                    border: "none",
-                                    fontWeight: "600",
-                                    fontSize: "14px",
-                                    lineHeight: "20px",
-                                }}
-                                calendarPosition='bottom'
-                            />
-                        </div>
-                    </label>
-
-                    {/* <label className={styles.label}>
-                        {t("time")}
-                        <input className={styles.inp} type="time" name="time" id="time" />
-                    </label> */}
-
-                    {/* <CustomSelect
-                        label={t("region")}
-                        options={[{ id: 1, label: "Контакты", value: "Контакты" }]}
-                        placeholder={t("all")}
-                    /> */}
-
-                    {/* <CustomSelect
-                        label={t("operator")}
-                        options={[{ id: 1, label: "Контакты", value: "Контакты" }]}
-                        placeholder={t("all")}
-                    /> */}
 
                     <Box w={"200px"}>
                         <CustomSelect
@@ -141,15 +137,14 @@ const ReportByDate = ({
                         />
                     </Box>
 
-                    {/* <CustomSelect
-                        label={t("byType")}
-                        options={[{ id: 1, label: "Контакты", value: "Контакты" }]}
-                        placeholder={t("all")}
-                    /> */}
-
                 </div>
 
-                <button className={styles.reset}>{t("reset")}</button>
+                <button
+                    className={styles.reset}
+                    onClick={() => setFilters({ from_date: "", to_date: "", status: "", type: "" })}
+                >
+                    {t("reset")}
+                </button>
 
                 <div className={styles.statusesCounts}>
                     <div
@@ -191,33 +186,7 @@ const ReportByDate = ({
                         count={chakraData.count}
                         keys={keys}
                         isLoading={isLoading}
-                        customCellRender={{
-                            // phone: {
-                            //     render: el => (
-                            //         <div className={styles.phone}>
-                            //             {numberAutoSpace(el.phone)}
-                            //             <button className={styles.viewCharacters}>{t("viewCharacters")}</button>
-                            //         </div>
-                            //     ),
-                            // },
-                            // messageText: {
-                            //     render: el => (
-                            //         <div className={styles.messageText}>
-                            //             <div className={styles.text}>{el?.messageText?.text}</div>
-                            //             <div className={styles.link}>{el?.messageText?.link}</div>
-                            //             <div>{t("characterCount", { symbol: el?.messageText?.symbol, count: el?.messageText?.count, })}</div>
-                            //         </div>
-                            //     ),
-                            // },
-                            // status_data: {
-                            //     render: el => (
-                            //         <div className={styles.statusWrapper}>
-                            //             <span className={styles.statusDate}>{el.status_data.date}</span>
-                            //             <span className={classNames(styles.statusDiv, styles?.[el?.status_data?.status])}>{t(el.status_data.status)}</span>
-                            //         </div>
-                            //     ),
-                            // },
-                        }}
+                        customCellRender={{}}
                     />
 
                 </div>

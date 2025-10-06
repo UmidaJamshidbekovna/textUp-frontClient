@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from 'react-query'
-import httpMain from './httpMain'
+import httpSMS from './httpSMS'
 
 const smsService = {
-    smsGetList: (params) => httpMain.get(`sms`, { params }),
-    create: (data) => httpMain.post(`send`, data),
-    smsGetById: (id) => httpMain.get(`sms/${id}`),
-    smsDelete: ({ id }) => httpMain.delete(`sms/${id}`),
-    smsEdit: ({ id, data }) => httpMain.put(`sms/${id}`, data),
+    smsGetList: (params) => httpSMS.get(`sms`, { params }),
+    create: (data) => httpSMS.post(`send`, data),
+    smsGetById: (id) => httpSMS.get(`sms/${id}`),
+    smsDelete: ({ id }) => httpSMS.delete(`sms/${id}`),
+    smsEdit: ({ id, data }) => httpSMS.put(`sms/${id}`, data),
 }
 
 export const useSmsCreateMutation = (mutationSettings = {}) => {

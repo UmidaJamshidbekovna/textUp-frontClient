@@ -26,7 +26,7 @@ deploy_to_dev:
   script:
     - cp $DEV_KUBECONFIG ~/.kube/config
     - DEPLOYMENT=$(echo $CI_PROJECT_NAME | sed s/_/-/g | sed s/$CI_PROJECT_NAMESPACE-//g)
-    - helm repo add --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD $HELM_REPO_NAME $HELM_REGISTRY_PATH
+    - helm repo add $HELM_REPO_NAME $HELM_REGISTRY_PATH --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD
     - helm upgrade --install $DEPLOYMENT $HELM_REPO_NAME/$HELM_REPO_NAME --set=image.tag=$CI_PIPELINE_IID --values .helm/values-dev.yaml -n $DEV_NAMESPACE
   only:
     - dev
@@ -48,7 +48,7 @@ deploy_to_prod:
   script:
     - cp $PROD_KUBECONFIG ~/.kube/config
     - DEPLOYMENT=$(echo $CI_PROJECT_NAME | sed s/_/-/g | sed s/$CI_PROJECT_NAMESPACE-//g)
-    - helm repo add --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD $HELM_REPO_NAME $HELM_REGISTRY_PATH
+    - helm repo add $HELM_REPO_NAME $HELM_REGISTRY_PATH --username $HELM_REGISTRY_USERNAME --password $HELM_REGISTRY_PASSWORD
     - helm upgrade --install $DEPLOYMENT $HELM_REPO_NAME/$HELM_REPO_NAME --set=image.tag=$CI_PIPELINE_IID --values .helm/values-prod.yaml -n $PROD_NAMESPACE
   only:
     - main

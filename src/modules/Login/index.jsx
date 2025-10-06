@@ -21,7 +21,7 @@ const Login = () => {
 
     const handleClick = () => setShow(!show)
 
-    const { mutate, isError } = useLogin({
+    const { mutate, isError, isLoading } = useLogin({
         onSuccess: res => {
             if (res?.user?.status === "active") {
                 login({
@@ -41,7 +41,7 @@ const Login = () => {
         },
         onError: err => {
             setError({ isError: true, message: "invalidLoginOrPassword" })
-            console.log("useLogin err ==>", err)
+
         },
     })
 
@@ -110,7 +110,7 @@ const Login = () => {
 
                     <Link className={styles.forgotPassword} href={"/auth/forgot-password"}>{t("forgotPassword")}?</Link>
 
-                    <Button onClick={() => handleLogin()} className={styles.loginBtn}>{t("login")}</Button>
+                    <Button onClick={() => handleLogin()} className={styles.loginBtn} isLoading={isLoading}>{t("login")}</Button>
 
                     <div className={styles.signUp}>
                         <span>{t("noProfile")}</span>
