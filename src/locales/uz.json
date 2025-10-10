@@ -222,7 +222,7 @@
   "operator": "Operator",
   "byStatus": "Status bo‘yicha",
   "byType": "Turi bo‘yicha",
-  "reset": "Сбросить",
+  "reset": "Tozalash",
   "deliveredWithNumber": "Yetkazildi ({{number}})",
   "transferredWithNumber": "Uzatildi ({{number}})",
   "notDeliveredWithNumber": "Yetkazilmadi ({{number}})",

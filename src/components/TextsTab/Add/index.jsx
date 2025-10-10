@@ -200,7 +200,7 @@ const Add = ({
                             onClick={() => handleConfirm()}
                             w={"50%"}
                             isDisabled={
-                                !isFormFilled(data) || !state?.readCharacterGuide || !state.confirmEnteredSmsText
+                                !state?.name || !state?.content || !state?.readCharacterGuide || !state.confirmEnteredSmsText
                             }
                         >
                             {t("save")}
