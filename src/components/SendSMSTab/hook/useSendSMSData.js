@@ -3,7 +3,7 @@ import { useTemplatesGetList } from "@/services/templates.service";
 import { useNickNamesGetList } from "@/services/nickname.service";
 import useCustomToast from "@/hooks/useCustomToast";
 
-export const useSendSMSData = ({ user, groupsCount, templatesCount }) => {
+export const useSendSMSData = ({ user, groupsCount }) => {
   const userId = user?.id ?? "";
   const { errorToast } = useCustomToast();
 
@@ -24,20 +24,21 @@ export const useSendSMSData = ({ user, groupsCount, templatesCount }) => {
   });
 
   // Templates data
-  const { data: templatesData } = useTemplatesGetList({
-    params: {
-      page: 1,
-      limit: templatesCount,
-      userId,
-    },
-    queryParams: {
-      onError: (err) => {
-        errorToast(`${err?.status}, ${err?.data?.error}`);
-        console.log(err);
+  const { data: templatesData, refetch: refetchTemplates } =
+    useTemplatesGetList({
+      params: {
+        page: 1,
+        limit: 100,
+        userId,
       },
-      enabled: !!userId,
-    },
-  });
+      queryParams: {
+        onError: (err) => {
+          errorToast(`${err?.status}, ${err?.data?.error}`);
+          console.log(err);
+        },
+        enabled: !!userId,
+      },
+    });
 
   // Nicknames data
   const { data: nickNamesData } = useNickNamesGetList({
@@ -59,6 +60,7 @@ export const useSendSMSData = ({ user, groupsCount, templatesCount }) => {
     groupsData,
     templatesData,
     nickNamesData,
+    refetchTemplates,
     isLoading: !groupsData || !templatesData || !nickNamesData,
   };
 };

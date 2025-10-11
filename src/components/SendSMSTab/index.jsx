@@ -1,9 +1,10 @@
 import useTranslation from 'next-translate/useTranslation'
 import styles from './styles.module.scss'
-import { Button, Flex, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from '@chakra-ui/react'
+import { Button, Flex, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, ModalCloseButton, useDisclosure } from '@chakra-ui/react'
 import { FaExternalLinkAlt, FaCheckCircle } from "react-icons/fa";
 import { useState } from 'react'
 import Link from 'next/link'
+import Add from '../TextsTab/Add'
 import CustomSelect from '../Inputs/CustomSelect';
 import CustomTextInput from '../Inputs/CustomTextInput';
 import classNames from 'classnames';
@@ -30,20 +31,21 @@ const initialData = {
 const SendSMSTab = ({
     user,
     groupsCount,
-    templatesCount,
+
 }) => {
     const userId = user?.id ?? ""
     const { errorToast, successToast } = useCustomToast()
     const [tabState, setTabState] = useState("byGroups")
     const [state, setState] = useState(initialData)
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+    const { isOpen: isOpenAddModal, onOpen: onOpenAddModal, onClose: onCloseAddModal } = useDisclosure()
     const { t } = useTranslation()
 
 
-    const { groupsData, templatesData, nickNamesData, isLoading } = useSendSMSData({
+    const { groupsData, templatesData, nickNamesData, isLoading, refetchTemplates } = useSendSMSData({
         user,
         groupsCount,
-        templatesCount
+
     })
 
 
@@ -210,12 +212,19 @@ const SendSMSTab = ({
 
                             <Flex justifyContent={"space-between"}>
                                 <Text mb='6px'>{t('approvedTemplates')}</Text>
-                                <Link href={""}>
-                                    <Flex alignItems={"center"} fontWeight={600} fontSize={"14px"} lineHeight={"20px"} gap={"4px"} color={"primary.main"}>
-                                        {t("createTemplate")}
-                                        <FaExternalLinkAlt />
-                                    </Flex>
-                                </Link>
+                                <Flex
+                                    alignItems={"center"}
+                                    fontWeight={600}
+                                    fontSize={"14px"}
+                                    lineHeight={"20px"}
+                                    gap={"4px"}
+                                    color={"primary.main"}
+                                    cursor={"pointer"}
+                                    onClick={onOpenAddModal}
+                                >
+                                    {t("createTemplate")}
+                                    <FaExternalLinkAlt />
+                                </Flex>
                             </Flex>
 
                             <CustomSelect
@@ -294,12 +303,19 @@ const SendSMSTab = ({
 
                             <Flex justifyContent={"space-between"}>
                                 <Text mb='6px'>{t('approvedTemplates')}</Text>
-                                <Link href={""}>
-                                    <Flex alignItems={"center"} fontWeight={600} fontSize={"14px"} lineHeight={"20px"} gap={"4px"} color={"primary.main"}>
-                                        {t("createTemplate")}
-                                        <FaExternalLinkAlt />
-                                    </Flex>
-                                </Link>
+                                <Flex
+                                    alignItems={"center"}
+                                    fontWeight={600}
+                                    fontSize={"14px"}
+                                    lineHeight={"20px"}
+                                    gap={"4px"}
+                                    color={"primary.main"}
+                                    cursor={"pointer"}
+                                    onClick={onOpenAddModal}
+                                >
+                                    {t("createTemplate")}
+                                    <FaExternalLinkAlt />
+                                </Flex>
                             </Flex>
 
                             <CustomSelect
@@ -373,6 +389,13 @@ const SendSMSTab = ({
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
+            <Add
+                isOpenCustomModal={isOpenAddModal}
+                user={user}
+                onClose={onCloseAddModal}
+                refetchTemplates={refetchTemplates}
+            />
 
         </div>
     )

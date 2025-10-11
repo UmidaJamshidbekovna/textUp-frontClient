@@ -29,6 +29,7 @@ const ReportByDate = ({
         sendCount: reportByDate?.sendCount ?? 0,
     })
 
+
     const [filters, setFilters] = useState({
         from_date: "",
         to_date: "",
@@ -69,6 +70,8 @@ const ReportByDate = ({
             return p;
         })(),
     })
+
+
 
 
     return (
@@ -186,7 +189,18 @@ const ReportByDate = ({
                         count={chakraData.count}
                         keys={keys}
                         isLoading={isLoading}
-                        customCellRender={{}}
+                        customCellRender={{
+                            phone: {
+                                render: (el) => {
+                                    return el.recipients && el.recipients.length > 0 ? el.recipients[0] : "-";
+                                }
+                            },
+                            status: {
+                                render: (el) => {
+                                    return <div className={classNames(styles.statusDiv, el.status == "delivered" ? styles.delivered : el.status == "send" ? styles.transferred : styles.notDelivered)}>{t(el.status)}</div>
+                                }
+                            }
+                        }}
                     />
 
                 </div>

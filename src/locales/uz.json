@@ -229,6 +229,7 @@
   "delivered": "Yetkazildi",
   "transferred": "Uzatildi",
   "notDelivered": "Yetkazilmadi",
+  "not_delivered": "Yetkazilmadi",
   "smsCost": "Yuborilgan SMS-xabarlarning narxi: SMS (Servis turdagi) 122 920 so‘m + SMS (Reklama turdagi) 0 so‘m = 122 920 so‘m",
   "smsPaymentInfo": "- SMS uchun to‘lovlar Yetkazildi va Uzatildi statuslari uchun yechib olinadi",
   "sentTime": "Jo‘natilgan vaqti",

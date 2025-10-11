@@ -229,6 +229,7 @@
   "delivered": "Delivered",
   "transferred": "Transferred",
   "notDelivered": "Not Delivered",
+  "not_delivered": "Not Delivered",
   "smsCost": "Cost of sent SMS messages: SMS (Service Type) 122,920 UZS + SMS (Advertising Type) 0 UZS = 122,920 UZS",
   "smsPaymentInfo": "- SMS charges apply for Delivered and Transferred statuses",
   "sentTime": "Sent Time",

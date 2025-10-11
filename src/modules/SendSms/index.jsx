@@ -55,7 +55,7 @@ const SendSms = ({
     }
 
     const tabSections = useMemo(() => ({
-        sendSms: <SendSMSTab user={user} groupsCount={groups.count ?? 0} templatesCount={templates.count ?? 0} />,
+        sendSms: <SendSMSTab user={user} groupsCount={groups.count ?? 0} />,
         contacts: <ContactsTab group={group} contactsTab={contactsTab} SSRContacts={contacts} groups={groups} user={user} />,
         groups: <GroupsTab SSRGroups={groups} user={user} />,
         texts: <TextsTab SSRTemplates={templates} user={user} />,

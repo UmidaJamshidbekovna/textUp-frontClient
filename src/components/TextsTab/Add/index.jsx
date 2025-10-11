@@ -33,6 +33,7 @@ const Add = ({
     isOpenCustomModal,
     onClose = () => { },
     user,
+    refetchTemplates,
 }) => {
     const { errorToast, successToast } = useCustomToast()
     const { t } = useTranslation()
@@ -57,6 +58,9 @@ const Add = ({
         onSuccess: res => {
             handleClose()
             successToast()
+            if (refetchTemplates) {
+                refetchTemplates()
+            }
         },
         onError: err => {
             handleClose()
@@ -68,6 +72,10 @@ const Add = ({
         onSuccess: res => {
             handleClose()
             successToast()
+            if (refetchTemplates) {
+                refetchTemplates()
+            }
+
         },
         onError: err => {
             handleClose()
