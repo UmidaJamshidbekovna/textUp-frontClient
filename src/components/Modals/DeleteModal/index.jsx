@@ -18,6 +18,7 @@ const DeleteModal = ({
     onClose = () => { },
     onDelete = () => { },
     children,
+    isLoading = false,
 }) => {
     const { t } = useTranslation()
 
@@ -53,10 +54,10 @@ const DeleteModal = ({
                 </ModalBody>
 
                 <ModalFooter p={"32px 24px 24px"} display={"grid"} gridTemplateColumns={"repeat(2, 1fr)"} gap={"12px"}>
-                    <Button variant={"outline"} onClick={onClose}>
+                    <Button variant={"outline"} onClick={onClose} isDisabled={isLoading}>
                         {t("no")}
                     </Button>
-                    <Button variant={"delete"} onClick={onDelete}>
+                    <Button variant={"delete"} onClick={onDelete} isLoading={isLoading}>
                         {t("delete")}
                     </Button>
                 </ModalFooter>

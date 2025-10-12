@@ -60,8 +60,10 @@ const TextsTab = ({
 
     const { mutate: deleteMutate, isLoading: deleteLoading } = useTemplateDeleteMutation({
         onSuccess: res => {
+
             refetch()
             successToast()
+            onCloseDeleteModal()
         },
         onError: err => {
             errorToast(`${err?.status}, ${err?.data?.error}`)
@@ -177,7 +179,17 @@ const TextsTab = ({
                     isLoading={isLoading}
                 />
 
-                <DeleteModal onDelete={() => { deleteState.id ? deleteMutate({ id: deleteState?.id }) : alert("Id yoq") }} isOpen={isOpenDeleteModal} onClose={onCloseDeleteModal}>
+                <DeleteModal
+                    onDelete={() => {
+
+                        if (deleteState.id) {
+                            deleteMutate({ id: deleteState?.id })
+                        }
+                    }}
+                    isOpen={isOpenDeleteModal}
+                    onClose={onCloseDeleteModal}
+                    isLoading={deleteLoading}
+                >
                     <Text fontWeight={600} fontSize={"16px"} lineHeight={"28px"}>
                         {t("deleteFullName", { name: deleteState.name })}
                     </Text>
