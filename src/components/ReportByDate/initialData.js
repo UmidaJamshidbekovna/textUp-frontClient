@@ -32,7 +32,7 @@ export const keys = [
   },
   {
     id: "6",
-    key: "tariffPrice",
+    key: "price",
     label: "priceSum",
   },
 ];
