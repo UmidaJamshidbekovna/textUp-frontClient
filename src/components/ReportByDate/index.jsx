@@ -7,72 +7,26 @@ import { CiCalendar } from 'react-icons/ci'
 import CustomSelect from '../Inputs/CustomSelect'
 import { keys, statuses } from './initialData'
 import classNames from 'classnames'
-import { useSmsGetList } from '@/services/sms.service'
-import useCustomToast from '@/hooks/useCustomToast'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { Box } from '@chakra-ui/react'
+import { useReportByDate } from './hooks'
 
-const ReportByDate = ({
-    reportByDate,
-    user,
-}) => {
-    const { successToast, errorToast, infoToast } = useCustomToast()
-    const router = useRouter()
-    const page = router.query?.page ?? 1
-    const limit = router.query?.limit ?? 10
-    const [chakraData, setChakraData] = useState({
-        smsList: reportByDate?.smsList ?? [],
-        count: reportByDate?.count ?? 0,
-        deliveredCount: reportByDate?.deliveredCount ?? 0,
-        notDeliveredCount: reportByDate?.notDeliveredCount ?? 0,
-        sendCount: reportByDate?.sendCount ?? 0,
-    })
-
-
-    const [filters, setFilters] = useState({
-        from_date: "",
-        to_date: "",
-        status: "",
-        type: "",
-    })
+const ReportByDate = ({ reportByDate, user }) => {
     const { t } = useTranslation()
 
-    const { isLoading } = useSmsGetList({
-        queryParams: {
-            onSuccess: res => {
-                setChakraData({
-                    smsList: res?.smsList ?? [],
-                    count: res?.count ?? 0,
-                    deliveredCount: res?.deliveredCount ?? 0,
-                    notDeliveredCount: res?.notDeliveredCount ?? 0,
-                    sendCount: res?.sendCount ?? 0,
-                })
-            },
-        },
-        params: (() => {
-            const p = { userId: user?.id, page, limit };
+    const {
+        chakraData,
+        filters,
+        isLoading,
+        searchInputRef,
+        handleSearchChange,
+        handleDateRangeChange,
+        handleStatusChange,
+        handleGroupChange,
+        handleReset,
+        groupOptions,
+    } = useReportByDate({ reportByDate, user })
 
-            // Add group ID if exists
-            if (router.query?.groupId) p.groupId = router.query.groupId;
-
-            // Add date filter based on range picker
-            if (filters.from_date && filters.to_date) {
-                p.from = filters.from_date;
-                p.to = filters.to_date;
-            }
-
-            // Add status filter
-            if (filters.status) {
-                p.status = filters.status;
-            }
-
-            return p;
-        })(),
-    })
-
-
-
+    console.log("groupOptions", groupOptions);
 
     return (
         <div className={styles.contacts}>
@@ -88,6 +42,16 @@ const ReportByDate = ({
                 </div>
 
                 <div className={styles.filters}>
+                    <label className={styles.label}>
+                        {t("searchByPhone")}
+                        <input
+                            type="text"
+                            placeholder={t("phoneNumber")}
+                            className={`${styles.inp} ${styles.searchInput}`}
+                            ref={searchInputRef}
+                            onChange={handleSearchChange}
+                        />
+                    </label>
 
                     <label className={styles.label}>
                         {t("selectDateRange")}
@@ -103,17 +67,7 @@ const ReportByDate = ({
                                         ]
                                         : null
                                 }
-                                onChange={(dateObjects) => {
-                                    if (dateObjects && dateObjects.length === 2 && dateObjects[0] && dateObjects[1]) {
-                                        const from_date = dateObjects[0].format("YYYY-MM-DD");
-                                        const to_date = dateObjects[1].format("YYYY-MM-DD");
-                                        setFilters(old => ({
-                                            ...old,
-                                            from_date,
-                                            to_date
-                                        }));
-                                    }
-                                }}
+                                onChange={handleDateRangeChange}
                                 placeholder={t("selectDateRange")}
                                 dateSeparator=" => "
                                 format="YYYY-MM-DD"
@@ -134,8 +88,18 @@ const ReportByDate = ({
                             label={t("byStatus")}
                             options={statuses}
                             placeholder={t("all")}
-                            onChange={(e) => setFilters(old => ({ ...old, status: e?.id }))}
+                            onChange={(e) => handleStatusChange(e?.id)}
                             value={statuses.find(el => el?.id == filters.status)}
+                            t={t}
+                        />
+                    </Box>
+                    <Box w={"200px"}>
+                        <CustomSelect
+                            label={t("byGroup")}
+                            options={groupOptions}
+                            placeholder={t("all")}
+                            onChange={(e) => handleGroupChange(e?.id)}
+                            value={groupOptions.find(el => el?.id == filters.group)}
                             t={t}
                         />
                     </Box>
@@ -144,7 +108,7 @@ const ReportByDate = ({
 
                 <button
                     className={styles.reset}
-                    onClick={() => setFilters({ from_date: "", to_date: "", status: "", type: "" })}
+                    onClick={handleReset}
                 >
                     {t("reset")}
                 </button>
@@ -152,25 +116,25 @@ const ReportByDate = ({
                 <div className={styles.statusesCounts}>
                     <div
                         className={styles.statusDiv}
-                        onClick={() => setFilters(old => ({ ...old, status: "" }))}
+                        onClick={() => handleStatusChange("")}
                     >
                         {t("all")} ({chakraData.count})
                     </div>
                     <div
                         className={classNames(styles.statusDiv, styles.delivered)}
-                        onClick={() => setFilters(old => ({ ...old, status: "delivered" }))}
+                        onClick={() => handleStatusChange("delivered")}
                     >
                         {t("deliveredWithNumber", { number: chakraData.deliveredCount })}
                     </div>
                     <div
                         className={classNames(styles.statusDiv, styles.transferred)}
-                        onClick={() => setFilters(old => ({ ...old, status: "send" }))}
+                        onClick={() => handleStatusChange("send")}
                     >
                         {t("transferredWithNumber", { number: chakraData?.sendCount })}
                     </div>
                     <div
                         className={classNames(styles.statusDiv, styles.notDelivered)}
-                        onClick={() => setFilters(old => ({ ...old, status: "not_delivered" }))}
+                        onClick={() => handleStatusChange("not_delivered")}
                     >
                         {t("notDeliveredWithNumber", { number: chakraData?.notDeliveredCount })}
                     </div>

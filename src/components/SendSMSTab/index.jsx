@@ -13,6 +13,8 @@ import PhoneNumberInput from '../Inputs/PhoneNumberInput';
 import useCustomToast from '@/hooks/useCustomToast';
 import { useSmsCreateMutation } from '@/services/sms.service';
 import { useSendSMSData } from './hook/useSendSMSData';
+import useSMSStatsText from '@/hooks/useSMSStatsText';
+import analyzeSMSTemplateContent from '@/hooks/analyzeSMSTemplateContent';
 
 
 const initialData = {
@@ -38,8 +40,10 @@ const SendSMSTab = ({
     const [tabState, setTabState] = useState("byGroups")
     const [state, setState] = useState(initialData)
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+    const [characterCountingCisible, setCharacterCountingCisible] = useState(false)
     const { isOpen: isOpenAddModal, onOpen: onOpenAddModal, onClose: onCloseAddModal } = useDisclosure()
     const { t } = useTranslation()
+    const smsStats = useSMSStatsText(analyzeSMSTemplateContent(state?.message), t);
 
 
     const { groupsData, templatesData, nickNamesData, isLoading, refetchTemplates } = useSendSMSData({
@@ -253,10 +257,21 @@ const SendSMSTab = ({
                                 placeholder={t("message")}
                                 name="text"
                                 id="text"
-                                onChange={(e) => setState(old => ({ ...old, message: e.target.value }))}
+                                onChange={(e) => {
+                                    setState(old => ({ ...old, message: e.target.value }))
+                                    e.target.value.length < 1 && setCharacterCountingCisible(false)
+                                }
+                                }
                                 value={state.message}
                             >
                             </textarea>
+                            {characterCountingCisible && (
+                                <p dangerouslySetInnerHTML={{ __html: smsStats }} />
+                            )}
+
+                            {!characterCountingCisible && !!state?.message?.length > 0 && (
+                                <span onClick={() => setCharacterCountingCisible(true)} className={styles.characterCountingBtn}>{t("characterCounting")}</span>
+                            )}
 
                         </div>
 
@@ -397,7 +412,7 @@ const SendSMSTab = ({
                 refetchTemplates={refetchTemplates}
             />
 
-        </div>
+        </div >
     )
 }
 

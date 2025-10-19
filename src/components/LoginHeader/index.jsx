@@ -34,7 +34,7 @@ const LoginHeader = ({ wrapperCls, }) => {
 
                         <div className={styles.callInfo}>
 
-                            <div className={styles.number}>71 123 45 67</div>
+                            <div className={styles.number}>55 514 49 09</div>
 
                             <div className={styles.subscriberDepartmenText}>{t("subscriberDepartmen")}</div>
 

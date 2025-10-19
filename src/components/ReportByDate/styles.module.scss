@@ -44,7 +44,7 @@
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 18px;
       margin-bottom: 12px;
 
       .label {
@@ -67,6 +67,9 @@
           &[type="time"]::-webkit-calendar-picker-indicator {
             display: none;
           }
+        }
+        .searchInput {
+          width: 350px;
         }
       }
     }
