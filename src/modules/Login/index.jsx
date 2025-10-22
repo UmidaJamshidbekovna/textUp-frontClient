@@ -3,7 +3,7 @@ import useTranslation from "next-translate/useTranslation";
 import LoginHeader from "@/components/LoginHeader";
 import CustomChakraInput from "@/components/Inputs/CustomChakraInput";
 import { useState } from "react";
-import { Button, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react";
+import { Box, Button, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -108,7 +108,9 @@ const Login = () => {
 
                     {error?.isError && <span style={{ color: "red" }}>{t(error.message)}</span>}
 
-                    <Link className={styles.forgotPassword} href={"/auth/forgot-password"}>{t("forgotPassword")}?</Link>
+                    <Box display={"flex"} justifyContent={"center"}>
+                        <Link className={styles.forgotPassword} href={"/auth/forgot-password"}>{t("forgotPassword")}?</Link>
+                    </Box>
 
                     <Button onClick={() => handleLogin()} className={styles.loginBtn} isLoading={isLoading}>{t("login")}</Button>
 

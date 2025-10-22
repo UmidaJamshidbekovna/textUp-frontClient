@@ -1,20 +1,18 @@
 import styles from "./styles.module.scss"
-import useTranslation from "next-translate/useTranslation";
-import { useState } from "react";
 import StepOne from "./StepOne";
+import StepTwo from "./StepTwo";
 import LoginHeader from "@/components/LoginHeader";
+import { useRouter } from "next/router";
 
 const ForgotPassword = () => {
-    const { t } = useTranslation()
-    const [state, setState] = useState({})
+    const router = useRouter()
+    const step = router.query.step ?? 1
 
     return (
         <div className={styles.forgotPassword}>
-
             <LoginHeader />
-
-            <StepOne />
-
+            {step == 1 && <StepOne />}
+            {step == 2 && <StepTwo />}
         </div>
     )
 };
