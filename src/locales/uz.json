@@ -311,6 +311,8 @@
   "selectDateRange": "Sana oralig'ini tanlang",
   "selectDates": "Sanalarni tanlang",
   "enterEmailForPasswordReset": "Tasdiqlash kodini olish uchun email manzilingizni kiriting",
+  "enterEmailAndNewPassword": "Hisobingizni tiklash uchun email va yangi parolni kiriting",
+  "verifyCode": "Kodni tasdiqlash",
   "sendVerificationCode": "Tasdiqlash kodini yuborish",
   "otpSentToEmail": "Emailingizga tasdiqlash kodi yuborildi",
   "emailNotFound": "Email topilmadi",

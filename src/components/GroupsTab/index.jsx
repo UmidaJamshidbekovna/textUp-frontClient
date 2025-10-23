@@ -17,7 +17,6 @@ import { CiSearch } from 'react-icons/ci';
 import { MdLock, MdLockOpen } from 'react-icons/md';
 import classNames from 'classnames';
 import { BodyContent } from './components/BodyContent';
-import { useGroupContactsManager } from './hooks/useGroupContactsManager';
 
 const btns = ({ props, deleteFn, editFn, statusEdit }) => {
 
@@ -56,18 +55,6 @@ function GroupsTab({ SSRGroups, user }) {
     const [count, setCount] = useState(SSRGroups?.count ?? 0)
     const [filters, setFilters] = useState({ search: "" })
     const [confirmClicked, setConfirmClicked] = useState(false);
-
-    // Hook to manage group contacts fetching and deletion
-    const {
-        contactCount,
-        isFetchingContacts,
-        isDeletingContacts,
-        deleteGroupContacts,
-    } = useGroupContactsManager({
-        userId,
-        groupId: deleteState?.id,
-        shouldFetch: isDeleteAllContactsChecked,
-    });
     const { isOpen: isOpenCustomModal, onOpen: onOpenCustomModal, onClose: onCloseCustomModal } = useDisclosure({
         defaultIsOpen: router?.query?.modal === "open",
         onClose: () => {
@@ -177,25 +164,14 @@ function GroupsTab({ SSRGroups, user }) {
             ? { id: deleteState.id, data: { status: "blocked", name: deleteState?.name ?? "", description: deleteState?.description ?? "" } }
             : isLockToggle
                 ? { id: deleteState.id, data: { status: "active", name: deleteState?.name ?? "", description: deleteState?.description ?? "" } }
-                : { id: deleteState.id };
+                : { id: deleteState.id, data: { delete_contacts: isDeleteAllContactsChecked } };
 
         action(data, {
-            onSuccess: async () => {
-                // After group is deleted successfully, delete contacts if checkbox is checked
-                if (isDelete && isDeleteAllContactsChecked) {
-                    try {
-                        await deleteGroupContacts();
-                        successToast(t('Group and contacts deleted successfully'));
-                    } catch (error) {
-                        errorToast(t('Group deleted but failed to delete contacts'));
-                        console.error('Error deleting contacts:', error);
-                    }
-                }
-
+            onSuccess: () => {
                 onCloseDeleteModal();
                 handleClose();
                 setConfirmClicked(false);
-                setIsDeleteAllContactsChecked(false); // Reset checkbox
+                setIsDeleteAllContactsChecked(false);
             },
             onError: () => {
                 setConfirmClicked(false);
@@ -210,14 +186,6 @@ function GroupsTab({ SSRGroups, user }) {
 
                 <Flex mb={"24px"} gap={"10px"}>
                     <Button onClick={() => onOpenCustomModal()} alignItems={"center"} display={"flex"} gap={"4px"}><FaPlus />{t("addGroup")}</Button>
-                    {/* <InputGroup flex={1}>
-                            <CustomTextInput
-                                icon={<CiSearch fontSize={"20px"} />}
-                                placeholder={t("search")}
-                                onChange={(e) => setFilters(old => ({ ...old, search: e?.target?.value }))}
-                                value={filters?.search}
-                            />
-                        </InputGroup> */}
                 </Flex>
 
                 <ChakraTable
@@ -252,8 +220,6 @@ function GroupsTab({ SSRGroups, user }) {
                     <BodyContent
                         isChecked={isDeleteAllContactsChecked}
                         setIsChecked={setIsDeleteAllContactsChecked}
-                        contactCount={contactCount}
-                        isFetchingContacts={isFetchingContacts}
                         showCheckbox={!deleteState.inBlackList && !deleteState.lockOpen}
                     />
                 }
@@ -262,8 +228,8 @@ function GroupsTab({ SSRGroups, user }) {
                         ? t("blockFullName", { name: deleteState?.name ?? "" })
                         : t("deleteFullName", { name: deleteState?.name ?? "" })
                 }
-                isLoading={deleteLoading || confirmClicked || isDeletingContacts}
-                isDisabled={deleteLoading || confirmClicked || isDeletingContacts}
+                isLoading={deleteLoading || confirmClicked}
+                isDisabled={deleteLoading || confirmClicked}
                 confirm={handleConfirm}
             />
 

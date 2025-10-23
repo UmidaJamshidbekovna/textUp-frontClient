@@ -311,6 +311,8 @@
   "selectDateRange": "Select Date Range",
   "selectDates": "Select dates",
   "enterEmailForPasswordReset": "Enter your email address to receive a verification code",
+  "enterEmailAndNewPassword": "Enter your email and new password to reset your account",
+  "verifyCode": "Verify code",
   "sendVerificationCode": "Send verification code",
   "otpSentToEmail": "Verification code sent to your email",
   "emailNotFound": "Email not found",

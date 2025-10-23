@@ -311,6 +311,8 @@
   "selectDateRange": "Выберите диапазон дат",
   "selectDates": "Выберите даты",
   "enterEmailForPasswordReset": "Введите адрес электронной почты для получения кода подтверждения",
+  "enterEmailAndNewPassword": "Введите email и новый пароль для сброса вашего аккаунта",
+  "verifyCode": "Подтвердить код",
   "sendVerificationCode": "Отправить код подтверждения",
   "otpSentToEmail": "Код подтверждения отправлен на вашу почту",
   "emailNotFound": "Электронная почта не найдена",

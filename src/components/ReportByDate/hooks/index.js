@@ -25,7 +25,7 @@ export const useReportByDate = ({ reportByDate, user }) => {
     status: "",
     type: "",
     search: "",
-    group: "",
+    group_id: "",
   });
 
   const searchInputRef = useRef(null);
@@ -68,8 +68,8 @@ export const useReportByDate = ({ reportByDate, user }) => {
   };
 
   // Group filter change handler
-  const handleGroupChange = (group) => {
-    setFilters((old) => ({ ...old, group }));
+  const handleGroupChange = (group_id) => {
+    setFilters((old) => ({ ...old, group_id }));
   };
 
   // Reset all filters
@@ -80,7 +80,7 @@ export const useReportByDate = ({ reportByDate, user }) => {
       status: "",
       type: "",
       search: "",
-      group: "",
+      group_id: "",
     });
     if (searchInputRef.current) {
       searchInputRef.current.value = "";
@@ -114,8 +114,8 @@ export const useReportByDate = ({ reportByDate, user }) => {
     }
 
     // Add group filter
-    if (filters.group) {
-      p.group = filters.group;
+    if (filters.group_id) {
+      p.group_id = filters.group_id;
     }
 
     return p;

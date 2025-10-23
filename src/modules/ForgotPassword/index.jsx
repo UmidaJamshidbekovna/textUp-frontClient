@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 
 const ForgotPassword = () => {
     const router = useRouter()
-    const step = router.query.step ?? 1
+    const step = router.query.step ?? "1"
 
     return (
         <div className={styles.forgotPassword}>
             <LoginHeader />
-            {step == 1 && <StepOne />}
-            {step == 2 && <StepTwo />}
+            {step === "1" && <StepOne />}
+            {step === "2" && <StepTwo />}
         </div>
     )
 };

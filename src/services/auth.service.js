@@ -5,7 +5,7 @@ const authService = {
   login: (data) => httpRequest.post(`login`, data),
   register: (data) => httpRequest.post(`register`, data),
   otpSend: (data) => httpRequest.post(`otp/send`, data),
-  resetPassword: (data) => httpRequest.post(`password/reset`, data),
+  resetPassword: (data) => httpRequest.put(`users/password`, data),
 
   // refreshToken: (data) => httpRequest.post(`auth/refresh`, data),
   // nursCreate: (data) => httpRequest.post(`auth/nurse`, data),

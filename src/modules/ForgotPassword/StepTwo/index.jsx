@@ -1,10 +1,9 @@
 import useTranslation from 'next-translate/useTranslation'
 import styles from './styles.module.scss'
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
+import { Button, Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import CustomTextInput from '@/components/Inputs/CustomTextInput'
 import { useState, useEffect } from 'react'
-import { GoEye, GoEyeClosed } from "react-icons/go"
 import { useOtpSendMutation, useResetPasswordMutation } from '@/services/auth.service'
 import useCustomToast from '@/hooks/useCustomToast'
 import Link from 'next/link'
@@ -17,22 +16,23 @@ const StepTwo = () => {
     const { errorToast, successToast } = useCustomToast()
 
     const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [otpCode, setOtpCode] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [showPassword, setShowPassword] = useState(false)
-    const [showConfirm, setShowConfirm] = useState(false)
     const [timer, setTimer] = useState(RESEND_TIMEOUT)
-    const [errors, setErrors] = useState({})
+    const [error, setError] = useState('')
 
     useEffect(() => {
-        // Get email from localStorage
+        // Get email and password from localStorage
         const savedEmail = localStorage.getItem('resetEmail')
-        if (!savedEmail) {
+        const savedPassword = localStorage.getItem('resetPassword')
+
+        if (!savedEmail || !savedPassword) {
             router.push('/auth/forgot-password')
             return
         }
+
         setEmail(savedEmail)
+        setPassword(savedPassword)
     }, [router])
 
     useEffect(() => {
@@ -55,9 +55,10 @@ const StepTwo = () => {
     })
 
     const { mutate: resetPasswordMutate, isLoading: resetLoading } = useResetPasswordMutation({
-        onSuccess: (res) => {
+        onSuccess: () => {
             successToast(t('passwordResetSuccess'))
             localStorage.removeItem('resetEmail')
+            localStorage.removeItem('resetPassword')
             router.push('/auth/login')
         },
         onError: (err) => {
@@ -67,50 +68,33 @@ const StepTwo = () => {
 
     const handleResend = () => {
         if (email) {
-            otpSendMutate({ email })
+            otpSendMutate({
+                email,
+                purpose: "password"
+            })
         }
-    }
-
-    const validateForm = () => {
-        const newErrors = {}
-
-        if (!otpCode) {
-            newErrors.otpCode = t('otpRequired')
-        }
-
-        if (!newPassword) {
-            newErrors.newPassword = t('passwordRequired')
-        } else if (newPassword.length < 6) {
-            newErrors.newPassword = t('passwordTooShort')
-        }
-
-        if (!confirmPassword) {
-            newErrors.confirmPassword = t('confirmPasswordRequired')
-        } else if (newPassword !== confirmPassword) {
-            newErrors.confirmPassword = t('passwordsDoNotMatch')
-        }
-
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
     }
 
     const handleResetPassword = () => {
-        if (!validateForm()) return
+        if (!otpCode) {
+            setError(t('otpRequired'))
+            return
+        }
 
+        setError('')
         resetPasswordMutate({
             email,
+            password,
             otp_code: otpCode,
-            newPassword,
         })
     }
 
     return (
         <div className={styles.section}>
-            <h2 className={styles.title}>{t("resetPassword")}</h2>
+            <h2 className={styles.title}>{t("verifyCode")}</h2>
             <p className={styles.description}>
                 {t("verificationCodeSentTo")} <strong>{email}</strong>
             </p>
-
 
             <div className={styles.form}>
                 <CustomTextInput
@@ -118,10 +102,10 @@ const StepTwo = () => {
                     placeholder="123456"
                     onChange={(e) => {
                         setOtpCode(e.target.value)
-                        setErrors(prev => ({ ...prev, otpCode: '' }))
+                        setError('')
                     }}
                     value={otpCode}
-                    error={errors.otpCode}
+                    error={error}
                 />
 
                 <button
@@ -132,61 +116,15 @@ const StepTwo = () => {
                     {timer > 0 ? `${t("resendCodeIn", { sec: timer })}` : t("resendCode")}
                 </button>
 
-
-
-                <Box display={'flex'} flexDirection={'column'} itemsAlign={'center'}>
-                    <InputGroup className={styles.passwordInp}>
-                        <Text className={styles.text} mb={"6px"}>{t("newPassword")}</Text>
-                        <Input
-                            name='newPassword'
-                            onChange={(e) => {
-                                setNewPassword(e.target.value)
-                                setErrors(prev => ({ ...prev, newPassword: '' }))
-                            }}
-                            value={newPassword}
-                            minH={"44px"}
-                            type={showPassword ? "text" : 'password'}
-                            placeholder={t("enterNewPassword")}
-                            _focusVisible={{ outline: "none" }}
-                        />
-                        <InputRightElement top={"auto"} bottom={"0"}>
-                            <button type='button' onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <GoEye /> : <GoEyeClosed />}
-                            </button>
-                        </InputRightElement>
-                    </InputGroup>
-                    {errors.newPassword && <Text color="red.500" fontSize="12px" mt="4px">{errors.newPassword}</Text>}
-                </Box>
-
-                <Box display={'flex'} flexDirection={'column'} itemsAlign={'center'}>
-                    <InputGroup className={styles.passwordInp}>
-                        <Text className={styles.text} mb={"6px"}>{t("confirmPassword")}</Text>
-                        <Input
-                            name='confirmPassword'
-                            onChange={(e) => {
-                                setConfirmPassword(e.target.value)
-                                setErrors(prev => ({ ...prev, confirmPassword: '' }))
-                            }}
-                            value={confirmPassword}
-                            minH={"44px"}
-                            type={showConfirm ? "text" : 'password'}
-                            placeholder={t("enterConfirmPassword")}
-                            _focusVisible={{ outline: "none" }}
-                        />
-                        <InputRightElement top={"auto"} bottom={"0"}>
-                            <button type='button' onClick={() => setShowConfirm(!showConfirm)}>
-                                {showConfirm ? <GoEye /> : <GoEyeClosed />}
-                            </button>
-                        </InputRightElement>
-                    </InputGroup>
-                    {errors.confirmPassword && <Text color="red.500" fontSize="12px" mt="0">{errors.confirmPassword}</Text>}
-                </Box>
-
-                <Flex gap={"8px"} mt={"24px"}>
+                <Flex gap={"8px"}>
                     <Button
                         w={"100%"}
                         variant={"outline"}
-                        onClick={() => router.push('/auth/forgot-password')}
+                        onClick={() => {
+                            localStorage.removeItem('resetEmail')
+                            localStorage.removeItem('resetPassword')
+                            router.push('/auth/forgot-password')
+                        }}
                     >
                         {t("back")}
                     </Button>
@@ -194,9 +132,9 @@ const StepTwo = () => {
                         w={"100%"}
                         onClick={handleResetPassword}
                         isLoading={resetLoading}
-                        isDisabled={!otpCode || !newPassword || !confirmPassword}
+                        isDisabled={!otpCode}
                     >
-                        {t("resetPassword")}
+                        {t("confirm")}
                     </Button>
                 </Flex>
 
