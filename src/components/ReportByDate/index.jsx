@@ -26,7 +26,7 @@ const ReportByDate = ({ reportByDate, user }) => {
         groupOptions,
     } = useReportByDate({ reportByDate, user })
 
-    console.log("groupOptions", groupOptions);
+
 
     return (
         <div className={styles.contacts}>
