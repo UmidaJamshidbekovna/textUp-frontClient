@@ -209,6 +209,7 @@
   "status": "Статус",
   "success": "Успешно",
   "noData": "Нет данных",
+  "no_options_available": "Здесь пусто",
   "pricesUpdatedMonthly": "* Цены могут обновляться каждый месяц",
   "serviceAvailableForSmsGateway": "** Услуга доступна только для SMS-шлюза",
   "smsChargeForAllStatuses": "** Плата за SMS снимается за все указанные статусы: Доставлено, Передано, Не доставлено",

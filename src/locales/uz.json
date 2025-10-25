@@ -209,6 +209,7 @@
   "status": "Status",
   "success": "Success",
   "noData": "Ma'lumotlar yo'q",
+  "no_options_available": "Ma'lumotlar mavjud emas",
   "pricesUpdatedMonthly": "* Narxlar har oy yangilanib turishi mumkin",
   "serviceAvailableForSmsGateway": "** Xizmat faqat SMS-shlyuz uchun mavjud",
   "smsChargeForAllStatuses": "** SMS uchun to'lov quyidagi barcha statuslar bo'yicha yechib olinadi: Yetkazildi, Uzatildi, Yetkazilmadi",

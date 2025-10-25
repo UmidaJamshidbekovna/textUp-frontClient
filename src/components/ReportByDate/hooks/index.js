@@ -140,7 +140,6 @@ export const useReportByDate = ({ reportByDate, user }) => {
   const { isLoading: groupsLoading, data: groupsData } = useGroupsGetList({
     queryParams: {
       onSuccess: (res) => {
-        console.log("groupsData", res);
         const arr = res?.groups?.map((el) => ({ id: el?.id, label: el?.name }));
         setGroupOptions(arr);
       },

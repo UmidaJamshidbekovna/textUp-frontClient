@@ -99,7 +99,7 @@ const ReportByDate = ({ reportByDate, user }) => {
                             options={groupOptions}
                             placeholder={t("all")}
                             onChange={(e) => handleGroupChange(e?.id)}
-                            value={groupOptions.find(el => el?.id == filters.group)}
+                            value={groupOptions?.find(el => el?.id == filters.groupId)}
                             t={t}
                         />
                     </Box>

@@ -209,6 +209,7 @@
   "status": "Status",
   "success": "Success",
   "noData": "No data",
+  "no_options_available": "No options available",
   "pricesUpdatedMonthly": "* Prices may be updated every month",
   "serviceAvailableForSmsGateway": "** The service is available only for the SMS gateway",
   "smsChargeForAllStatuses": "** SMS charges apply to all specified statuses: Delivered, Transferred, Not Delivered",

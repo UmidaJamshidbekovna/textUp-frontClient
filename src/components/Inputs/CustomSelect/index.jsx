@@ -72,17 +72,23 @@ const CustomSelect = ({
                 </svg>
             </div>
             <div className={`${styles.optionsContainer} ${isOpen ? styles.open : ''}`}>
-                {options?.map((option) => (
-                    <div
-                        key={option?.id}
-                        className={`${styles.option} ${value?.id === option?.id ? styles.selected : ''}`}
-                        onClick={() => handleOptionClick(option)}
-                    >
-                        {/* <Tooltip label={getDisplayText(option)}><span>{getDisplayText(option)}</span></Tooltip> */}
-                        {getDisplayText(option)}
-                        {typeToggle && <span>{!!option?.type && option.type}</span>}
+                {options?.length > 0 ? (
+                    options.map((option) => (
+                        <div
+                            key={option?.id}
+                            className={`${styles.option} ${value?.id === option?.id ? styles.selected : ''}`}
+                            onClick={() => handleOptionClick(option)}
+                        >
+                            {/* <Tooltip label={getDisplayText(option)}><span>{getDisplayText(option)}</span></Tooltip> */}
+                            {getDisplayText(option)}
+                            {typeToggle && <span>{!!option?.type && option.type}</span>}
+                        </div>
+                    ))
+                ) : (
+                    <div className={styles.emptyState}>
+                        {t ? t('no_options_available') : 'No options available'}
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );
