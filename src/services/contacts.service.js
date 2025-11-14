@@ -8,8 +8,8 @@ const contactsService = {
 	contactDelete: ({ id }) => httpRequest.delete(`contacts/${id}`),
 	contactsDeleteMultiple: ({ userId, contactIds }) => httpRequest.delete(`contacts/delete-multiple`, { data: { userId, contactIds } }),
 	contactEdit: ({ id, data }) => httpRequest.put(`contacts/${id}`, data),
-	contactsExport: (userId) => httpRequest.get('contacts/export', {
-		params: { userId },
+	contactsExport: (params) => httpRequest.get('contacts/export', {
+		params,
 		responseType: 'blob',
 		headers: {
 			accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -56,9 +56,9 @@ export const useContactsImport = (mutationSettings = {}) => {
 	);
 };
 
-export const useContactsExport = ({ userId }) => {
+export const useContactsExport = (mutationSettings = {}) => {
 	return useMutation(
-		() => contactsService.contactsExport(userId),  // функция для выполнения запроса
+		(params) => contactsService.contactsExport(params),  // функция для выполнения запроса
 		{
 			onSuccess: (data) => {
 				const url = window.URL.createObjectURL(new Blob([data], {
@@ -75,6 +75,7 @@ export const useContactsExport = ({ userId }) => {
 			onError: (error) => {
 				console.error('Ошибка при скачивании файла:', error);
 			},
+			...mutationSettings,
 		}
 	);
 };

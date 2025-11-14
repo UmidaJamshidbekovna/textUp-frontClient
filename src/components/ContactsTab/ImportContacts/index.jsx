@@ -4,11 +4,13 @@ import { FiUpload } from 'react-icons/fi'
 import styles from "../styles.module.scss"
 import useTranslation from 'next-translate/useTranslation';
 import useCustomToast from '@/hooks/useCustomToast';
+import { useRouter } from 'next/router';
 
 export const ImportContacts = ({
     refetch,
     user,
 }) => {
+    const router = useRouter();
     const { errorToast, successToast } = useCustomToast()
     const { t } = useTranslation()
     const { mutate: importContacts, isLoading, isSuccess, isError } = useContactsImport({
@@ -27,6 +29,9 @@ export const ImportContacts = ({
         if (file && user?.id) {
             const formData = new FormData();
             formData.append('userId', user.id);
+            if (router.query?.groupId) {
+                formData.append('groupId', router.query.groupId);
+            }
             formData.append('file', file, file.name);
 
             importContacts(formData);

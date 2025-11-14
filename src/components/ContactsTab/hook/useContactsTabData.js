@@ -102,9 +102,16 @@ export const useContactsTabData = ({ SSRContacts, group, user }) => {
     });
 
   // Contacts export mutation
-  const { mutate: download, isLoading: isDownloadLoading } = useContactsExport({
-    userId: user?.id,
-  });
+  const { mutate: downloadMutation, isLoading: isDownloadLoading } =
+    useContactsExport();
+
+  const download = () => {
+    const params = { userId: user?.id };
+    if (router.query?.groupId) {
+      params.groupId = router.query.groupId;
+    }
+    downloadMutation(params);
+  };
 
   return {
     // Data
