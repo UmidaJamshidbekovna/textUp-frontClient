@@ -70,6 +70,37 @@
             padding: 10px 16px;
         }
 
+        .tabList {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+
+            .transactionTab {
+                padding-bottom: 11px;
+                border-bottom: 2px solid transparent;
+                cursor: pointer;
+                user-select: none;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 20px;
+                color: #344054;
+                transition: all 0.2s;
+
+                &.activeTab {
+                    border-bottom: 2px solid var(--primary-bg);
+                    color: var(--primary-bg);
+                }
+
+                &:hover {
+                    color: var(--primary-bg);
+                }
+            }
+        }
+
         .chakraTable {
             flex: 1;
         }

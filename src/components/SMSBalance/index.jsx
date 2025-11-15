@@ -7,10 +7,11 @@ import DatePicker from 'react-multi-date-picker'
 import ChakraTable from '../ChakraTable'
 import { keys } from './initialData'
 import { CiCalendar } from 'react-icons/ci'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useTransactionsGetList } from '@/services/transactions.service'
 import useCustomToast from '@/hooks/useCustomToast'
 import { useRouter } from 'next/router'
+import classNames from 'classnames'
 
 const SMSBalance = ({
     user,
@@ -20,8 +21,34 @@ const SMSBalance = ({
     const router = useRouter()
     const page = router.query?.page ?? 1
     const limit = router.query?.limit ?? 10
+    const tabState = router.query.transactionTab || "all"
     const [chakraData, setChakraData] = useState({ transactions: transactions?.transactions ?? [], count: transactions?.count ?? 0 })
     const { t } = useTranslation()
+
+    const tabs = useMemo(() => [
+        {
+            id: 1,
+            transactionTab: "all",
+            label: "all",
+        },
+        {
+            id: 2,
+            transactionTab: "deposit",
+            label: "deposits",
+        },
+        {
+            id: 3,
+            transactionTab: "withdraw",
+            label: "withdrawals",
+        },
+    ], [])
+
+    const handleTabClick = (el) => {
+        router.push({
+            pathname: router.pathname,
+            query: { ...router.query, transactionTab: el.transactionTab, page: 1 }
+        }, undefined, { shallow: true });
+    }
 
     const { isLoading } = useTransactionsGetList({
         queryParams: {
@@ -33,6 +60,7 @@ const SMSBalance = ({
             userId: user?.id,
             page,
             limit,
+            ...(tabState !== "all" && { type: tabState }),
         },
     })
 
@@ -72,7 +100,7 @@ const SMSBalance = ({
 
             <div className={styles.table}>
 
-                <Flex justify={"space-between"} alignItems={"center"}>
+                <Flex justify={"space-between"} alignItems={"center"} mb={"20px"}>
 
                     <div className={styles.paymentHistoryTitle}>
                         {t("paymentHistory")}
@@ -97,6 +125,20 @@ const SMSBalance = ({
                     </div>
 
                 </Flex>
+
+                <div className={styles.tabList}>
+                    {
+                        tabs.map(el => (
+                            <div
+                                onClick={() => handleTabClick(el)}
+                                className={classNames(styles.transactionTab, tabState == el.transactionTab && styles.activeTab)}
+                                key={el.id}
+                            >
+                                {t(el.label)}
+                            </div>
+                        ))
+                    }
+                </div>
 
                 <ChakraTable
                     wrapperCls={styles.chakraTable}

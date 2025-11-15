@@ -88,6 +88,8 @@
   "paymentType": "Payment type",
   "serviceType": "Service type",
   "paymentHistory": "Payment history",
+  "deposits": "Deposits",
+  "withdrawals": "Withdrawals",
   "selectDate": "Select a date",
   "areYouSureLogout": "Are you sure you want to log out?",
   "cancel": "Cancel",

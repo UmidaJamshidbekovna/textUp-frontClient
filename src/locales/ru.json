@@ -88,6 +88,8 @@
   "paymentType": "Тип оплаты",
   "serviceType": "Тип сервиса",
   "paymentHistory": "История платежей",
+  "deposits": "Пополнения",
+  "withdrawals": "Списания",
   "selectDate": "Выберите дату",
   "areYouSureLogout": "Вы уверены, что хотите выйти?",
   "cancel": "Отмена",
