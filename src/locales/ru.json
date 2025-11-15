@@ -198,6 +198,7 @@
   "addContact": "Добавить контакт",
   "uploadContacts": "Загрузить контакты",
   "downloadContacts": "Скачать контакты",
+  "downloadReport": "Скачать отчет",
   "uploadNewContactsInfo": "Чтобы загрузить новые контакты, <a href=\"/contacts.xlsx\" class=\"downloadTemplate\" class=\"downloadTemplate\">скачайте шаблон</a> и заполните его. * Все поля обязательны для заполнения. В шаблоне не должно быть более 10 000 контактов.",
   "search": "Поиск",
   "searchByName": "По имени",

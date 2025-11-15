@@ -7,6 +7,13 @@ const smsService = {
     smsGetById: (id) => httpSMS.get(`sms/${id}`),
     smsDelete: ({ id }) => httpSMS.delete(`sms/${id}`),
     smsEdit: ({ id, data }) => httpSMS.put(`sms/${id}`, data),
+    smsExport: (params) => httpSMS.get('sms/export', {
+        params,
+        responseType: 'blob',
+        headers: {
+            accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        },
+    }),
 }
 
 export const useSmsCreateMutation = (mutationSettings = {}) => {
@@ -27,6 +34,30 @@ export const useSmsGetList = ({ params = {}, queryParams = {} } = {}) => {
 
 export const useSmsGetById = ({ id = "", queryParams = {} } = {}) => {
     return useQuery(["sms-GET-BY-ID", id], () => smsService.smsGetById(id), { ...queryParams })
+};
+
+export const useSmsExport = (mutationSettings = {}) => {
+    return useMutation(
+        (params) => smsService.smsExport(params),
+        {
+            onSuccess: (data) => {
+                const url = window.URL.createObjectURL(new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                }));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'sms-report.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+            },
+            onError: (error) => {
+                console.error('Ошибка при скачивании файла:', error);
+            },
+            ...mutationSettings,
+        }
+    );
 };
 
 export default smsService

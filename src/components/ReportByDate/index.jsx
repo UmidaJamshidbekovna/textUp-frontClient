@@ -4,10 +4,11 @@ import styles from './styles.module.scss'
 import Link from 'next/link'
 import DatePicker, { DateObject } from 'react-multi-date-picker'
 import { CiCalendar } from 'react-icons/ci'
+import { FiDownload } from 'react-icons/fi'
 import CustomSelect from '../Inputs/CustomSelect'
 import { keys, statuses } from './initialData'
 import classNames from 'classnames'
-import { Box } from '@chakra-ui/react'
+import { Box, Button } from '@chakra-ui/react'
 import { useReportByDate } from './hooks'
 
 const ReportByDate = ({ reportByDate, user }) => {
@@ -24,6 +25,8 @@ const ReportByDate = ({ reportByDate, user }) => {
         handleGroupChange,
         handleReset,
         groupOptions,
+        downloadReport,
+        isDownloadLoading,
     } = useReportByDate({ reportByDate, user })
 
 
@@ -37,7 +40,17 @@ const ReportByDate = ({ reportByDate, user }) => {
 
                     <h2 className={styles.title}>{t("reportByDate")}</h2>
 
-                    <Link href={"/sms-symbol"} className={styles.link}>{t("instructionReview")}</Link>
+                    <div>
+                        <Button
+                            onClick={downloadReport}
+                            variant="outline"
+                            isLoading={isDownloadLoading}
+                            leftIcon={<FiDownload fontSize={"16px"} />}
+                        >
+                            {t("downloadReport")}
+                        </Button>
+                        <Link href={"/sms-symbol"} className={styles.link}>{t("instructionReview")}</Link>
+                    </div>
 
                 </div>
 

@@ -198,6 +198,7 @@
   "addContact": "Add Contact",
   "uploadContacts": "Upload Contacts",
   "downloadContacts": "Download Contacts",
+  "downloadReport": "Download Report",
   "uploadNewContactsInfo": "To upload new contacts, <a href=\"/contacts.xlsx\" class=\"downloadTemplate\" class=\"downloadTemplate\">download the template</a> and fill it out. * All fields must be completed. The number of contacts in the template must not exceed 10,000.",
   "search": "Search",
   "searchByName": "By Name",

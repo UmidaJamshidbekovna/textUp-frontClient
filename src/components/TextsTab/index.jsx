@@ -123,18 +123,21 @@ const TextsTab = ({
                     customCellRender={{
                         name: {
                             render: (el) => (
-                                <Flex flexDirection={"column"} gap={"5px"}>
+                                <Flex flexDirection={"column"} gap={"5px"} width={"180px"}>
                                     <Box>{el?.name}</Box>
-                                    <Box sx={statusStyles[el.status]}>{t(el?.status)}</Box>
+                                    <Box sx={{
+                                        ...statusStyles[el.status],
+                                        width: 'fit-content',
+                                    }}>{t(el?.status)}</Box>
                                 </Flex>
                             )
                         },
                         sender_name: {
-                            render: (el) => "4546"
+                            render: (el) => el?.user_full_name
                         },
                         template_types: {
                             render: (el) => (
-                                <Flex flexDirection={"column"}>
+                                <Flex flexDirection={"column"} >
                                     {template_types?.map((type, i) => (
                                         <div key={i} dangerouslySetInnerHTML={{ __html: type }} />
                                     ))}
@@ -143,8 +146,8 @@ const TextsTab = ({
                         },
                         content: {
                             render: (el) => (
-                                <Box maxW={"203px"}>
-                                    <div style={{ marginBottom: "24px" }} dangerouslySetInnerHTML={{ __html: el?.content }} />
+                                <Box maxW={"90%"}>
+                                    <div style={{ marginBottom: "24px", width: '100%' }} dangerouslySetInnerHTML={{ __html: el?.content }} />
                                     {!!el?.reason && <Flex gap={"5px"} style={{ color: el.status == "cancelled" ? "red" : "#000" }}>
                                         {el.status == "cancelled" && <IoIosWarning style={{ flexShrink: 0 }} />}
                                         {el?.reason}
@@ -154,7 +157,7 @@ const TextsTab = ({
                         },
                         createdAt: {
                             render: (el) => (
-                                <Flex flexDirection={"column"} gap={"12px"} alignItems={"start"}>
+                                <Flex flexDirection={"column"} gap={"12px"} alignItems={"start"} width={"200px"}>
                                     {el?.createdAt && <div><b>{t("createdAt")}:</b> {formatUtcToLocal(el.createdAt)}</div>}
                                     {el?.acceptedAt && <div><b>{t("textAccepted")}:</b> {formatUtcToLocal(el.acceptedAt)}</div>}
                                     {el?.cancelledAt && <div><b>{t("textRejected")}:</b> {formatUtcToLocal(el.cancelledAt)}</div>}

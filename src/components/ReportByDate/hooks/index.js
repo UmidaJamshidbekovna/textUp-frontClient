@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { useSmsGetList } from "@/services/sms.service";
+import { useSmsGetList, useSmsExport } from "@/services/sms.service";
 import { useGroupsGetList } from "@/services/groups.service";
 import useCustomToast from "@/hooks/useCustomToast";
 
@@ -156,6 +156,21 @@ export const useReportByDate = ({ reportByDate, user }) => {
     },
   });
 
+  // SMS export mutation
+  const { mutate: downloadMutation, isLoading: isDownloadLoading } = useSmsExport();
+
+  const downloadReport = () => {
+    const params = { userId: user?.id };
+    
+    // Add date filter if exists
+    if (filters.from_date && filters.to_date) {
+      params.from = filters.from_date;
+      params.to = filters.to_date;
+    }
+    
+    downloadMutation(params);
+  };
+
   // Cleanup debounce timer on unmount
   useEffect(() => {
     return () => {
@@ -176,5 +191,7 @@ export const useReportByDate = ({ reportByDate, user }) => {
     handleGroupChange,
     handleReset,
     groupOptions,
+    downloadReport,
+    isDownloadLoading,
   };
 };
