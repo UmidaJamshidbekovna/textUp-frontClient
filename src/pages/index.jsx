@@ -1,19 +1,34 @@
 import { parseCookies } from 'nookies';
 import React from 'react'
+import Landing from '@/components/Landing'
 
-const index = () => {
-    return (
-        <div>index</div>
-    )
+const HomePage = () => {
+    return <Landing />
 }
 
-export default index
+export default HomePage
 
 export async function getServerSideProps(context) {
+    // const cookies = parseCookies(context);
+    // const accessToken = cookies?.accessToken;
     return {
         redirect: {
             destination: '/user/sms',
             permanent: false,
         },
+    };
+
+    // If user is already logged in, redirect to dashboard
+    // if (accessToken) {
+    //     return {
+    //         redirect: {
+    //             destination: '/user/sms',
+    //             permanent: false,
+    //         },
+    //     };
+    // }
+
+    return {
+        props: {},
     };
 }
