@@ -5,6 +5,7 @@ export const data = [
     phone_code: [
       "Beeline GSM (+998 90)",
       "Beeline GSM (+998 91)",
+      "Beeline GSM (+998 92)",
       "Uzmobile GSM (+998 99)",
       "Uzmobile GSM (+998 77)",
       "Uzmobile GSM (+998 70)",
