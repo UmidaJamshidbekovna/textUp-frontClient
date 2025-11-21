@@ -221,6 +221,30 @@ $secondary-200: #fff4d2;
       }
     }
   }
+  // MobileOpen Nav
+  .desktopNav {
+    display: flex;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .mobileNav {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end; 
+      width: 20%;
+    }
+  }
+  .loginBtn {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
 
   // Hero Section
   .hero {
