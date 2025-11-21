@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../Logo";
+import { getCookie } from "cookies-next";
 import {
   FiMenu,
   FiX,
@@ -14,8 +15,9 @@ import {
   FiSend,
 } from "react-icons/fi";
 import useTranslation from "next-translate/useTranslation";
-
+ const accessToken = getCookie('accessToken');
 const Landing = () => {
+   const [accessToken, setAccessToken] = useState(undefined);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("Python");
 
@@ -265,44 +267,50 @@ func main() {
 }`,
   };
 
-  const features = [
+    const features = [
     {
       image:
         "https://images.unsplash.com/photo-1557838923-2985c318be48?w=600&h=400&fit=crop",
-      title: "Reach millions with",
-      highlight: "1:1 engagement",
+      title: "Keng ko‘lamli",
+      highlight: "Xabar Yetkazish",
       description:
-        "Become the master of your SMS strategy by grabbing your Free SMS Playbook and achieve an astounding 98% read rate.",
-      cta: "SMS Marketing Playbook",
+        "Bir vaqtning o‘zida 10 000+ xabar yuboring — tezkor yoki rejalashtirilgan, shaxsiylashtirilgan mass-xabarlar.",
+      cta: "Boshlash",
     },
     {
       image:
         "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-      title: "Convert more",
-      highlight: "customers at scale",
+      title: "Kontaktlar va",
+      highlight: "Oson Boshqaruv",
       description:
-        "Increase engagement with personalized SMS automations that trigger based on customer behavior.",
-      cta: "Learn about Flow Builder",
+        "Kontaktlarni yuklang, segmentlang va API orqali tizimlarga ulang — jarayonlarni avtomatlashtiring.",
+      cta: "Kontaktlarni Boshqarish",
     },
     {
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop",
-      title: "Expand the conversation with",
-      highlight: "rich content",
+      title: "Aniq va Real vaqt",
+      highlight: "Analitika",
       description:
-        "Attach personalized, rich content to your text messages with our prebuilt landing page templates.",
-      cta: "Learn about Landing Pages",
+        "Hisobotlar, statistikalar va kampaniya samaradorligini to‘liq tahlil qiling.",
+      cta: "Hisobotlarni Ko‘rish",
     },
     {
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop",
-      title: "Predict your most",
-      highlight: "valuable customers",
+      title: "Sanoat bo‘yicha",
+      highlight: "Yechimlar",
       description:
-        "Segment and retarget those most likely to purchase by analyzing data and customer behavior.",
-      cta: "Try for free",
+        "Ta’lim, xizmat ko‘rsatish, bank-moliya va muddatli to‘lov do‘konlari uchun maxsus imkoniyatlar.",
+      cta: "Batafsil",
     },
   ];
+
+  useEffect(() => {
+    const token = getCookie("accessToken");
+    setAccessToken(token || null);
+  }, []);
+  if (accessToken === undefined) return null;
 
   return (
     <div className={styles.landing}>
@@ -363,35 +371,36 @@ func main() {
           <div className={styles.heroCenter}>
             <div className={styles.badge}>
               <FiStar />
-              <span>Trusted by 10,000+ businesses</span>
+              <span>10,000+ bizneslar tanlagan platforma</span>
             </div>
             <h1 className={styles.heroTitle}>
-              Turn SMS into <span>revenue</span>
+              Zamonaviy <span>SMS Platforma</span>
             </h1>
+
             <p className={styles.heroDescription}>
-              Transform customer experience and drive sales by instantly
-              connecting with your audience.
+              Tezkor aloqa orqali mijozlar tajribasini yangi bosqichga ko‘tarib,{" "}
+              <br /> biznes o‘sishini jadallashtiring.
             </p>
             <div className={styles.heroCtas}>
-              <Link href="/auth/signup" className={styles.heroPrimaryBtn}>
-                Start Your Free Trial
-              </Link>
-              <Link href="#features" className={styles.heroSecondaryBtn}>
-                How It Works
+              <Link
+                href={accessToken ? "/user/sms" : "/auth/login"}
+                className={styles.heroPrimaryBtn}
+              >
+                {accessToken ? "Tezkor SMS" : "Login"}
               </Link>
             </div>
             <div className={styles.trustIndicators}>
               <div className={styles.trustItem}>
                 <FiCheck />
-                <span>No credit card needed</span>
+                <span>Qulay interface</span>
               </div>
               <div className={styles.trustItem}>
                 <FiCheck />
-                <span>Cancel anytime</span>
+                <span>Tezkor habar yuborish</span>
               </div>
               <div className={styles.trustItem}>
                 <FiCheck />
-                <span>100 Free SMS</span>
+                <span>24/7 Texnik yordam</span>
               </div>
             </div>
           </div>
@@ -414,10 +423,10 @@ func main() {
       <section id="features" className={styles.features}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>Get the right message across</h2>
+            <h2>Bizning Imkoniyatlar</h2>
             <p>
-              Our conversational commerce portal lets you engage with customers
-              exactly when they want you to.
+              Bizning platforma — ommaviy xabar yuborish, kontaktlarni
+              boshqarish va tahlil qilish uchun tezkor va ishonchli yechim.
             </p>
           </div>
           <div className={styles.featuresGrid}>
@@ -448,9 +457,13 @@ func main() {
       <section id="developers" className={styles.codeSection}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>Or build it with our APIs</h2>
-            <p>Create a scalable messaging solution in minutes.</p>
+            <h2>API orqali yanada tez</h2>
+            <p>
+              Bir necha daqiqada kengaytiriladigan xabar yuborish yechimini
+              yarating.
+            </p>
           </div>
+
           <div className={styles.codeExamples}>
             <div className={styles.languageTabs}>
               {languages.map((lang) => (
@@ -479,6 +492,7 @@ func main() {
                 </pre>
               </div>
             </div>
+
             <div className={styles.codeCtas}>
               <button className={styles.codePrimaryBtn}>
                 API Documentation
