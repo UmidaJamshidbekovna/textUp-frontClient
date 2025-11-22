@@ -56,7 +56,7 @@ const Landing = () => {
                                     <span>admin@textup.uz</span>
                                 </a>
                             </div>
-                            <Link href={accessToken ? "/user/sms" : "/auth/login"} className={styles.loginBtn}>
+                            <Link href={accessToken ? "/user/sms" : "/auth/login"} className={styles.mobileLoginBtn}>
                                 Kirish
                             </Link>
                         </div>
