@@ -370,7 +370,7 @@ const Landing = () => {
                         <div className={styles.footerBrand}>
                             <Logo color="white" />
                             <p>
-                                Bir necha oddiy qadamda k&apos;plab kompaniyalar
+                                Bir necha oddiy qadamda ko&apos;plab kompaniyalar
                                 nima uchun bizni SMS provayderi sifatida tanlaganini bilib oling.
                             </p>
 
