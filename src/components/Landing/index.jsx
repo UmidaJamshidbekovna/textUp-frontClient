@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,22 +13,52 @@ import {
     FiStar,
     FiArrowRight,
     FiSend,
-    FiPhone,
     FiMail,
+    FiZap,
+    FiDollarSign,
+    FiShield,
 } from "react-icons/fi";
+import { FaTelegram } from "react-icons/fa";
+import { SiGmail } from "react-icons/si";
 import { features, codeExamples } from './mock';
 
 const Landing = () => {
     const accessToken = getCookie('accessToken');
     const [selectedLanguage, setSelectedLanguage] = useState("Python");
+    const [isScrollingDown, setIsScrollingDown] = useState(false);
+    const [lastScrollY, setLastScrollY] = useState(0);
     const languages = ["Python", "Node.js", "PHP", "Ruby", "Java", "C#", "GO"];
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY < 10) {
+                setIsScrollingDown(false);
+            } else if (currentScrollY > lastScrollY) {
+                setIsScrollingDown(true);
+            } else {
+                setIsScrollingDown(false);
+            }
+
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollY]);
 
 
 
 
     return (
         <div className={styles.landing}>
-            <header className={styles.header}>
+            <div className={`${styles.notificationBanner} ${isScrollingDown ? styles.hidden : ''}`}>
+                <div className={styles.container}>
+                    <p>TextUp — 1 oylik bepul sinov muddati bilan sizni kutmoqda!</p>
+                </div>
+            </div>
+            <header className={`${styles.header} ${isScrollingDown ? styles.headerTop : ''}`}>
                 <nav className={styles.nav}>
                     <div className={styles.navContent}>
                         <Link href="/" className={styles.logo}>
@@ -47,13 +77,13 @@ const Landing = () => {
                             </Link>
 
                             <div className={styles.contactInfo}>
-                                <a href="tel:+998555144909" className={styles.contactItem}>
-                                    <FiPhone />
-                                    <span>+998555144909</span>
+                                <a href="https://t.me/Textupsupport24_bot" className={styles.contactItem} target='_blank'>
+                                    <FaTelegram />
+
                                 </a>
-                                <a href="mailto:admin@textup.uz" className={styles.contactItem}>
-                                    <FiMail />
-                                    <span>admin@textup.uz</span>
+                                <a href="mailto:admin@textup.uz" className={styles.contactItem} target='_blank'>
+                                    <SiGmail />
+
                                 </a>
                             </div>
                             <Link href={accessToken ? "/user/sms" : "/auth/login"} className={styles.loginBtn}>
@@ -131,30 +161,95 @@ const Landing = () => {
             <section id="features" className={styles.features}>
                 <div className={styles.container}>
                     <div className={styles.sectionHeader}>
-                        <h2>Bizning Imkoniyatlar</h2>
+                        <h2>Sinov muddati — 1-yanvargacha bepul foydalaning</h2>
                         <p>
-                            Bizning platforma — ommaviy xabar yuborish, kontaktlarni
-                            boshqarish va tahlil qilish uchun tezkor va ishonchli yechim.
+                            TextUp platformasi orqali 1-yanvarga qadar istalgan miqdordagi SMS xabarlarni bepul yuboring va mijozlaringiz bilan aloqani qayta tiklang.
                         </p>
                     </div>
                     <div className={styles.featuresGrid}>
-                        {features.map((feature, index) => (
-                            <div key={index} className={styles.featureCard}>
-                                <div className={styles.featureImage}>
-                                    <Image
-                                        src={feature.image}
-                                        alt={feature.title}
-                                        width={600}
-                                        height={400}
-                                    />
-                                </div>
-                                <h3>
-                                    {feature.title} <span>{feature.highlight}</span>
-                                </h3>
-                                <p>{feature.description}</p>
-
+                        <div className={styles.featureCard}>
+                            <div className={styles.featureImage}>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1557838923-2985c318be48?w=600&h=400&fit=crop"
+                                    alt="Cheklanmagan SMS"
+                                    width={600}
+                                    height={400}
+                                />
                             </div>
-                        ))}
+                            <h3>Cheklanmagan miqdorda SMS</h3>
+                            <p>
+                                Sinov davrida siz cheklanmagan miqdorda SMS yuborishingiz mumkin.
+                            </p>
+                        </div>
+
+                        <div className={styles.featureCard}>
+                            <div className={styles.featureImage}>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop"
+                                    alt="To'liq imkoniyatlar"
+                                    width={600}
+                                    height={400}
+                                />
+                            </div>
+                            <h3>To&apos;liq imkoniyatlar</h3>
+                            <p>
+                                Platformaning barcha asosiy imkoniyatlaridan to&apos;liq foydalanasiz. Xizmat tezligi va sifatini shaxsan sinab ko&apos;rasiz.
+                            </p>
+                        </div>
+
+                        <div className={styles.featureCard}>
+                            <div className={styles.featureImage}>
+                                <Image
+                                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop"
+                                    alt="TextUp sinov muddati"
+                                    width={600}
+                                    height={400}
+                                />
+                            </div>
+                            <h3>TextUp sizni kutmoqda</h3>
+                            <p>
+                                TextUp — 1 oylik bepul sinov muddati bilan sizni kutmoqda!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="advantages" className={styles.advantages}>
+                <div className={styles.container}>
+                    <div className={styles.sectionHeader}>
+                        <h2>Nima uchun TextUp? — Bizning Ustunliklarimiz</h2>
+                    </div>
+                    <div className={styles.advantagesGrid}>
+                        <div className={styles.advantageCard}>
+                            <div className={styles.advantageIcon}>
+                                <FiZap />
+                            </div>
+                            <h3>Tezkor yetkazib berish</h3>
+                            <p>
+                                TextUp orqali yuborilgan SMS xabarlari boshqa platformalarga nisbatan tezroq atiga 1-2 sekundda yetib boradi. Optimizatsiya qilingan serverlarimiz va to&apos;g&apos;ridan-to&apos;g&apos;ri operatorlar bilan ulanishlar xabarlaringizni kechikishsiz yetkazilishini ta&apos;minlaydi.
+                            </p>
+                        </div>
+
+                        <div className={styles.advantageCard}>
+                            <div className={styles.advantageIcon}>
+                                <FiDollarSign />
+                            </div>
+                            <h3>Qulay va raqobatbardosh narxlar</h3>
+                            <p>
+                                Biz sizga eng maqul narxlarni taklif qilamiz. TextUp istalgan SMS platforma bilan narx bo&apos;yicha bemalol bellasha oladi.
+                            </p>
+                        </div>
+
+                        <div className={styles.advantageCard}>
+                            <div className={styles.advantageIcon}>
+                                <FiShield />
+                            </div>
+                            <h3>Ishonchli tizim</h3>
+                            <p>
+                                Barqaror ishlaydigan tizim, qulay boshqaruv paneli va sodda integratsiya — bularning barchasi SMS jarayonlarini oson boshqarishingiz uchun.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
