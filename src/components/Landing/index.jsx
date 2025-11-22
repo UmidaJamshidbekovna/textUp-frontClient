@@ -6,14 +6,10 @@ import Image from "next/image";
 import Logo from "../Logo";
 import { getCookie } from "cookies-next";
 import {
-    FiMenu,
-    FiX,
-    FiChevronDown,
+
     FiCheck,
     FiStar,
-    FiArrowRight,
     FiSend,
-    FiMail,
     FiZap,
     FiDollarSign,
     FiShield,
