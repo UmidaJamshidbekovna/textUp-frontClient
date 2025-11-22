@@ -13,6 +13,8 @@ import {
     FiStar,
     FiArrowRight,
     FiSend,
+    FiPhone,
+    FiMail,
 } from "react-icons/fi";
 import { features, codeExamples } from './mock';
 
@@ -33,33 +35,27 @@ const Landing = () => {
                             <Logo />
                         </Link>
                         <div className={styles.desktopNav}>
-                            <div className={styles.navGroup}>
-                                <button className={styles.navButton}>
-                                    <span>Mahsulotlar</span>
-                                    <FiChevronDown />
-                                </button>
-                            </div>
+
                             <Link href="#pricing" className={styles.navLink}>
                                 Narxlar
                             </Link>
                             <Link href="#developers" className={styles.navLink}>
-                                Dasturchilar
+                                API Hujjatlari
                             </Link>
-                            <div className={styles.navGroup}>
-                                <button className={styles.navButton}>
-                                    <span>Yechimlar</span>
-                                    <FiChevronDown />
-                                </button>
-                            </div>
-                            <div className={styles.navGroup}>
-                                <button className={styles.navButton}>
-                                    <span>Resurslar</span>
-                                    <FiChevronDown />
-                                </button>
-                            </div>
-                            <Link href="#contact" className={styles.navLink}>
-                                Aloqa
+                            <Link href="#features" className={styles.navLink}>
+                                Yechimlar
                             </Link>
+
+                            <div className={styles.contactInfo}>
+                                <a href="tel:+998555144909" className={styles.contactItem}>
+                                    <FiPhone />
+                                    <span>+998555144909</span>
+                                </a>
+                                <a href="mailto:admin@textup.uz" className={styles.contactItem}>
+                                    <FiMail />
+                                    <span>admin@textup.uz</span>
+                                </a>
+                            </div>
                             <Link href={accessToken ? "/user/sms" : "/auth/login"} className={styles.loginBtn}>
                                 Kirish
                             </Link>
@@ -83,7 +79,7 @@ const Landing = () => {
                     <div className={styles.heroCenter}>
                         <div className={styles.badge}>
                             <FiStar />
-                            <span>10,000+ bizneslar tanlagan platforma</span>
+                            <span>Ko&apos;plab bizneslar tanlagan platforma</span>
                         </div>
                         <h1 className={styles.heroTitle}>
                             Zamonaviy <span>SMS Platforma</span>
@@ -374,7 +370,7 @@ const Landing = () => {
                         <div className={styles.footerBrand}>
                             <Logo color="white" />
                             <p>
-                                Bir necha oddiy qadamda 10,000 dan ortiq kompaniyalar
+                                Bir necha oddiy qadamda k&apos;plab kompaniyalar
                                 nima uchun bizni SMS provayderi sifatida tanlaganini bilib oling.
                             </p>
 
