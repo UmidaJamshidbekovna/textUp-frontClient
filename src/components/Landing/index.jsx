@@ -13,10 +13,12 @@ import {
     FiZap,
     FiDollarSign,
     FiShield,
+    FiPhone,
 } from "react-icons/fi";
 import { FaTelegram } from "react-icons/fa";
 import { SiGmail } from "react-icons/si";
-import { features, codeExamples } from './mock';
+import { codeExamples } from './mock';
+import { FaPhone } from "react-icons/fa6";
 
 const Landing = () => {
     const accessToken = getCookie('accessToken');
@@ -73,6 +75,10 @@ const Landing = () => {
                             </Link>
 
                             <div className={styles.contactInfo}>
+                                <a href="tel:+998555144909" className={styles.contactItem} target='_blank'>
+                                    <FaPhone />
+                                    +998555144909
+                                </a>
                                 <a href="https://t.me/Textupsupport24_bot" className={styles.contactItem} target='_blank'>
                                     <FaTelegram />
 

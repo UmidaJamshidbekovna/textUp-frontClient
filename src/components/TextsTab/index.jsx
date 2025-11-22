@@ -23,6 +23,7 @@ import CustomTextInput from '../Inputs/CustomTextInput'
 import { CiSearch } from 'react-icons/ci'
 import { formatUtcToLocal } from '@/utils'
 
+
 // active
 // inactive
 // in_verify
@@ -78,7 +79,13 @@ const TextsTab = ({
 
     return (
         <div className={styles.texts}>
+            <div className={styles.warningMessage}>
+                <IoIosWarning />
 
+                <p>Tasdiqlash uchun yuborilgan Matnlar Dushanbadan-Jumagacha 09:00-17:00 gacha ko&apos;rib chiqiladi.
+
+                    SMS habar matnlari 1 soatdan 3 soatgacha moderatsiyadan o&apos;tkaziladi.</p>
+            </div>
             <div className={styles.setcion}>
 
                 <div className={styles.head}>

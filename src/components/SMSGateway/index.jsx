@@ -24,9 +24,9 @@ const SMSGateway = () => {
                     <a
                         target="_blank"
                         rel="noopener noreferrer"
-                        href='https://documenter.getpostman.com/view/663428/RzfmES4z?version=latest'
+                        href="https://docs.google.com/document/d/1EoWbc9UPmZg9jUC4ys_o7cYbX72vAfs4m0-aTXh5tCc/edit?usp=sharing"
                     >
-                        https://documenter.getpostman.com/view/663428/RzfmES4z?version=latest
+                        https://docs.google.com/document/d/1EoWbc9UPmZg9jUC4ys_o7cYbX72vAfs4m0-aTXh5tCc/edit?usp=sharing
                     </a>
 
                 </div>
